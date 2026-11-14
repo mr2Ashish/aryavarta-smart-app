@@ -1,0 +1,2465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aryavarta Automation | Smart Panel Configurator, APFC ROI & Lead Command Center</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & JetBrains Mono for Engineering Readouts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            arya: {
+              navy: '#0f172a',
+              slate: '#1e293b',
+              cyan: '#0284c7',
+              cyanLight: '#38bdf8',
+              amber: '#f59e0b',
+              amberDark: '#d97706',
+              emerald: '#10b981'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Industrial Blueprint & Print Styling */
+    body {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      overflow-x: hidden;
+    }
+    .blueprint-grid {
+      background-color: #0b1120;
+      background-image: 
+        linear-gradient(to right, rgba(56, 189, 248, 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(56, 189, 248, 0.08) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .blueprint-grid-light {
+      background-color: #f8fafc;
+      background-image: 
+        linear-gradient(to right, rgba(2, 132, 199, 0.07) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(2, 132, 199, 0.07) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    /* Custom Range Slider */
+    input[type="range"] {
+      accent-color: #0284c7;
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #e2e8f0;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #64748b;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+    /* Print Media Query for Official Proposal & QR Stickers */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printableProposalArea, #printableProposalArea * {
+        visibility: visible;
+      }
+      #printableProposalArea {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        box-shadow: none !important;
+        border: none !important;
+        background: white !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans antialiased">
+
+  <!-- ===================================================================== -->
+  <!-- TOP INDUSTRIAL HEADER BAR                                             -->
+  <!-- ===================================================================== -->
+  <header class="bg-arya-navy text-white border-b border-slate-800 sticky top-0 z-40 shadow-lg no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between py-3 gap-3">
+        <!-- Brand Identity -->
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-lg bg-gradient-to-br from-sky-500 to-amber-500 p-0.5 shadow-md flex-shrink-0">
+              <div class="w-full h-full bg-arya-navy rounded-[7px] flex items-center justify-center">
+                <i class="fa-solid fa-bolt-lightning text-amber-400 text-xl"></i>
+              </div>
+            </div>
+            <div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="font-extrabold text-lg sm:text-xl tracking-tight text-white">ARYAVARTA <span class="text-sky-400">AUTOMATION</span></span>
+                <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  <i class="fa-solid fa-certificate mr-1 text-emerald-400"></i>ISO 9001 & 14001
+                </span>
+              </div>
+              <p class="text-xs text-slate-400">
+                Turnkey Electrical & Automation Engineering • Chikhali, Pune | <a href="https://www.aryavartaautomation.in/" target="_blank" class="text-sky-400 hover:underline">aryavartaautomation.in</a>
+              </p>
+            </div>
+          </div>
+
+          <!-- Mobile Direct WhatsApp CTA -->
+          <a href="https://wa.me/919766037466?text=Hello%20Aryavarta%20Automation%20Team%2C%20I%20would%20like%20to%20discuss%20an%20industrial%20panel%20requirement." target="_blank" class="md:hidden inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-3 py-2 rounded-lg shadow">
+            <i class="fa-brands fa-whatsapp text-sm"></i> Chat
+          </a>
+        </div>
+
+        <!-- Right Status & Hotline -->
+        <div class="hidden md:flex items-center gap-4">
+          <div class="text-right">
+            <div class="text-[11px] uppercase tracking-wider text-slate-400 font-mono">Engineering Desk • Pune</div>
+            <div class="text-xs font-mono text-slate-200 flex items-center gap-2">
+              <span><i class="fa-solid fa-phone text-sky-400 mr-1"></i>+91 9766037466</span>
+              <span class="text-slate-600">|</span>
+              <span>+91 7028962982</span>
+            </div>
+          </div>
+          <a href="https://wa.me/919766037466?text=Hello%20Aryavarta%20Automation%2C%20we%20need%20a%20technical%20offer%20for%20our%20plant." target="_blank" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-3.5 py-2.5 rounded-lg shadow-sm transition">
+            <i class="fa-brands fa-whatsapp text-base"></i>
+            <span>WhatsApp Desk</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="flex space-x-1 overflow-x-auto pt-1 pb-0 border-t border-slate-800/80" aria-label="Main Navigation">
+        <button onclick="switchTab('tab-configurator')" id="btn-tab-configurator" class="tab-btn group flex items-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-semibold rounded-t-lg border-b-2 border-sky-400 bg-slate-800/90 text-white whitespace-nowrap transition">
+          <i class="fa-solid fa-microchip text-sky-400"></i>
+          <span>1. 60-Sec Panel Configurator & Live SLD</span>
+          <span class="ml-1 px-1.5 py-0.5 text-[10px] font-mono bg-sky-500/20 text-sky-300 rounded">INBOUND</span>
+        </button>
+
+        <button onclick="switchTab('tab-roi')" id="btn-tab-roi" class="tab-btn group flex items-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-semibold rounded-t-lg border-b-2 border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 whitespace-nowrap transition">
+          <i class="fa-solid fa-chart-line text-amber-400"></i>
+          <span>2. APFC & VFD Penalty ROI Calculator</span>
+          <span class="ml-1 px-1.5 py-0.5 text-[10px] font-mono bg-amber-500/20 text-amber-300 rounded">AUDIT</span>
+        </button>
+
+        <button onclick="switchTab('tab-radar')" id="btn-tab-radar" class="tab-btn group flex items-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-semibold rounded-t-lg border-b-2 border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 whitespace-nowrap transition">
+          <i class="fa-solid fa-satellite-dish text-emerald-400"></i>
+          <span>3. Pan-India Project Radar & Outbound CRM</span>
+          <span id="crmLeadCountBadge" class="ml-1 px-1.5 py-0.5 text-[10px] font-mono bg-emerald-500/20 text-emerald-300 rounded">6 LEADS</span>
+        </button>
+
+        <button onclick="switchTab('tab-toolkit')" id="btn-tab-toolkit" class="tab-btn group flex items-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-semibold rounded-t-lg border-b-2 border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 whitespace-nowrap transition">
+          <i class="fa-solid fa-qrcode text-purple-400"></i>
+          <span>4. Google Sheets Webhook & QR Toolkit</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===================================================================== -->
+  <!-- MAIN APPLICATION CONTAINER                                            -->
+  <!-- ===================================================================== -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 no-print">
+
+    <!-- =================================================================== -->
+    <!-- TAB 1: 60-SEC PANEL CONFIGURATOR & LIVE SLD                         -->
+    <!-- =================================================================== -->
+    <section id="tab-configurator" class="tab-panel space-y-6">
+      <!-- Top Value Banner -->
+      <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-sky-950 rounded-xl p-4 sm:p-5 text-white shadow-md border border-slate-700 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-amber-500/20 border border-amber-400/30 text-amber-300 text-xs font-mono mb-2">
+            <i class="fa-solid fa-bolt"></i> INSTANT E-PLAN BLOCK SLD & BUDGETARY ESTIMATOR
+          </div>
+          <h1 class="text-lg sm:text-xl font-bold tracking-tight">Configure Your Industrial Panel & Generate an Official Budgetary Proposal in 60 Seconds</h1>
+          <p class="text-xs sm:text-sm text-slate-300 mt-1">
+            Engineered to IEC 61439 / IS 8623 standards for Sugar, Ethanol, Dairy, Brewery, Edible Oil, Water Treatment & MIDC Plants.
+          </p>
+        </div>
+        <div class="flex flex-wrap sm:flex-nowrap gap-2 flex-shrink-0">
+          <div class="bg-slate-900/90 border border-slate-700 rounded-lg px-3 py-2 text-center">
+            <div class="text-[10px] font-mono text-slate-400 uppercase">Delivered Projects</div>
+            <div class="text-base font-mono font-bold text-sky-400">150+ Plants</div>
+          </div>
+          <div class="bg-slate-900/90 border border-slate-700 rounded-lg px-3 py-2 text-center">
+            <div class="text-[10px] font-mono text-slate-400 uppercase">Design Platform</div>
+            <div class="text-base font-mono font-bold text-amber-400">E-Plan P8</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Configurator Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- LEFT COLUMN: ENGINEERING PARAMETERS (5 Cols) -->
+        <div class="lg:col-span-5 space-y-5">
+          <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div class="flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center font-mono font-bold text-sm">01</span>
+                <h2 class="font-bold text-slate-800 text-base">System & Load Parameters</h2>
+              </div>
+              <button onclick="resetConfigurator()" class="text-xs text-slate-500 hover:text-sky-600 font-medium">
+                <i class="fa-solid fa-rotate-left mr-1"></i>Reset
+              </button>
+            </div>
+
+            <!-- Target Industry -->
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">1. Process Industry Sector</label>
+              <select id="cfgIndustry" onchange="updateConfiguration()" class="w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500">
+                <option value="Sugar & Ethanol Distillery">Sugar & Ethanol Distillery</option>
+                <option value="Dairy & Milk Processing">Dairy & Milk Processing Plant</option>
+                <option value="Brewery Industries">Brewery & Beverage Plant</option>
+                <option value="Edible Oil Refinery">Edible Oil & Solvent Extraction</option>
+                <option value="Evaporation Systems">Evaporation & Dryer Systems</option>
+                <option value="Food Processing">Food Processing & Cold Storage</option>
+                <option value="Water Treatment (ETP/STP)">Water Treatment (ETP / STP / WTP)</option>
+                <option value="MIDC Manufacturing Plant">MIDC Heavy Engineering / Auto Plant</option>
+              </select>
+            </div>
+
+            <!-- Panel Type Selector -->
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">2. Panel Category</label>
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-2" id="panelTypeButtons">
+                <button type="button" onclick="selectPanelType('MCC Panel')" data-type="MCC Panel" class="panel-type-btn active-panel-btn px-3 py-2 rounded-lg border text-xs font-semibold text-left transition flex flex-col justify-between bg-sky-50 border-sky-600 text-sky-900">
+                  <i class="fa-solid fa-gears text-sky-600 mb-1"></i>
+                  <span>MCC Panel</span>
+                </button>
+                <button type="button" onclick="selectPanelType('PCC Panel')" data-type="PCC Panel" class="panel-type-btn px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 text-xs font-semibold text-left transition flex flex-col justify-between">
+                  <i class="fa-solid fa-bolt text-amber-500 mb-1"></i>
+                  <span>PCC Panel</span>
+                </button>
+                <button type="button" onclick="selectPanelType('APFC Panel')" data-type="APFC Panel" class="panel-type-btn px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 text-xs font-semibold text-left transition flex flex-col justify-between">
+                  <i class="fa-solid fa-battery-full text-emerald-600 mb-1"></i>
+                  <span>APFC Panel</span>
+                </button>
+                <button type="button" onclick="selectPanelType('VFD Panel')" data-type="VFD Panel" class="panel-type-btn px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 text-xs font-semibold text-left transition flex flex-col justify-between">
+                  <i class="fa-solid fa-wave-square text-indigo-600 mb-1"></i>
+                  <span>VFD Panel</span>
+                </button>
+                <button type="button" onclick="selectPanelType('PLC & SCADA Automation Panel')" data-type="PLC & SCADA Automation Panel" class="panel-type-btn col-span-2 sm:col-span-2 px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 text-xs font-semibold text-left transition flex items-center gap-2">
+                  <i class="fa-solid fa-microchip text-purple-600 text-base"></i>
+                  <span>PLC, HMI & SCADA Automation Panel</span>
+                </button>
+              </div>
+              <input type="hidden" id="cfgPanelType" value="MCC Panel" />
+            </div>
+
+            <!-- Total Connected Load (kW / kVAR) -->
+            <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200">
+              <div class="flex justify-between items-center mb-1">
+                <label id="lblLoadRating" class="text-xs font-semibold uppercase tracking-wider text-slate-700">3. Total Connected Load (kW)</label>
+                <div class="flex items-center gap-1">
+                  <input type="number" id="cfgLoadInput" min="15" max="2500" step="5" value="250" oninput="syncLoadFromNumber(this.value)" class="w-24 text-right font-mono font-bold text-sm bg-white border border-slate-300 rounded px-2 py-1 text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500" />
+                  <span id="lblLoadUnit" class="text-xs font-mono font-bold text-slate-600">kW</span>
+                </div>
+              </div>
+              <input type="range" id="cfgLoadSlider" min="15" max="2500" step="5" value="250" oninput="syncLoadFromSlider(this.value)" class="w-full h-2 bg-slate-200 rounded-lg cursor-pointer" />
+              <div class="flex justify-between text-[10px] font-mono text-slate-400 mt-1">
+                <span>15 kW</span>
+                <span>500 kW</span>
+                <span>1250 kW</span>
+                <span>2500 kW</span>
+              </div>
+            </div>
+
+            <!-- Switchgear Make & Busbar Material -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">4. Switchgear Make</label>
+                <select id="cfgMake" onchange="updateConfiguration()" class="w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500">
+                  <option value="Schneider Electric">Schneider Electric</option>
+                  <option value="Siemens">Siemens</option>
+                  <option value="L&T (Lauritz Knudsen)">L&T (Lauritz Knudsen)</option>
+                  <option value="ABB">ABB</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">5. Busbar Material</label>
+                <select id="cfgBusbar" onchange="updateConfiguration()" class="w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500">
+                  <option value="Electrolytic Copper">Electrolytic Copper (99.9%)</option>
+                  <option value="EC Grade Aluminium">EC Grade Aluminium</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Enclosure Rating & Outgoing Feeders -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">6. Enclosure Protection</label>
+                <select id="cfgEnclosure" onchange="updateConfiguration()" class="w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500">
+                  <option value="IP54 Indoor (CRCA 14/16 SWG)">IP54 Indoor (CRCA 2mm)</option>
+                  <option value="IP55 Dustproof Industrial">IP55 Dustproof Industrial</option>
+                  <option value="IP65 Outdoor Weatherproof">IP65 Outdoor Canopy</option>
+                  <option value="SS-304 Hygienic (Dairy/Food Grade)">SS-304 Hygienic (Dairy/Food)</option>
+                </select>
+              </div>
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label id="lblFeederCount" class="text-xs font-semibold uppercase tracking-wider text-slate-600">7. Outgoing Feeders</label>
+                  <span id="valFeederCount" class="text-xs font-mono font-bold text-sky-700 bg-sky-50 px-2 py-0.5 rounded border border-sky-200">12 Nos</span>
+                </div>
+                <input type="range" id="cfgFeeders" min="2" max="48" step="2" value="12" oninput="updateConfiguration()" class="w-full h-2 bg-slate-200 rounded-lg cursor-pointer mt-2" />
+                <div class="flex justify-between text-[10px] font-mono text-slate-400 mt-1">
+                  <span>2</span>
+                  <span>16</span>
+                  <span>32</span>
+                  <span>48 Feeders</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- System Voltage Info Badge -->
+            <div class="flex items-center justify-between bg-slate-100 rounded-lg px-3 py-2 text-xs text-slate-600 font-mono">
+              <span><i class="fa-solid fa-plug-circle-bolt text-amber-500 mr-1.5"></i>System: 415V AC ±10%, 3-Ph, 4-Wire, 50Hz</span>
+              <span class="font-bold text-slate-800">50kA / 1Sec</span>
+            </div>
+          </div>
+
+          <!-- LEAD CAPTURE & UNLOCK OFFICIAL PROPOSAL CARD -->
+          <div class="bg-white rounded-xl shadow-md border-2 border-sky-600 p-5 space-y-4 relative overflow-hidden">
+            <div class="absolute top-0 right-0 bg-amber-500 text-slate-950 font-mono font-bold text-[10px] px-2.5 py-1 rounded-bl-lg uppercase">
+              Instant PDF + SLD Export
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-7 h-7 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center font-mono font-bold text-sm">02</span>
+              <div>
+                <h3 class="font-bold text-slate-900 text-base">Unlock Official PDF Quote & BOM</h3>
+                <p class="text-xs text-slate-500">Enter your project details to generate a printable ISO-certified proposal</p>
+              </div>
+            </div>
+
+            <form id="leadCaptureForm" onsubmit="handleLeadSubmission(event)" class="space-y-3">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-medium text-slate-700 mb-1">Your Name *</label>
+                  <input type="text" id="leadName" required placeholder="e.g. Rajesh Deshmukh" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500" />
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-slate-700 mb-1">Company / Plant Name *</label>
+                  <input type="text" id="leadCompany" required placeholder="e.g. Sahyadri Sugar & Ethanol" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500" />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label class="block text-xs font-medium text-slate-700 mb-1">WhatsApp Mobile *</label>
+                  <input type="tel" id="leadPhone" required placeholder="98220XXXXX" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-sky-500" />
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-slate-700 mb-1">Work Email</label>
+                  <input type="email" id="leadEmail" placeholder="projects@company.in" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500" />
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-slate-700 mb-1">Plant Location / MIDC</label>
+                  <input type="text" id="leadLocation" placeholder="e.g. Chakan MIDC, Pune" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500" />
+                </div>
+              </div>
+
+              <div class="pt-1 flex flex-col sm:flex-row gap-2.5">
+                <button type="submit" class="flex-1 bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm py-3 px-4 rounded-lg shadow-md hover:shadow-lg transition flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-file-pdf text-base"></i>
+                  <span>Send to Aryavarta & Open Official PDF Quote</span>
+                </button>
+                <button type="button" onclick="sendConfigToWhatsApp()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm py-3 px-4 rounded-lg shadow transition flex items-center justify-center gap-2">
+                  <i class="fa-brands fa-whatsapp text-base"></i>
+                  <span>1-Click WhatsApp</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: LIVE SLD BLUEPRINT & CALCULATED SPECS (7 Cols) -->
+        <div class="lg:col-span-7 space-y-5">
+          
+          <!-- Live Engineering Readout Cards -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div class="bg-arya-navy text-white p-3.5 rounded-xl border border-slate-800 shadow-sm">
+              <div class="text-[11px] font-mono text-slate-400 uppercase flex items-center justify-between">
+                <span>Full Load Current</span>
+                <i class="fa-solid fa-gauge-high text-sky-400"></i>
+              </div>
+              <div id="specCurrent" class="text-xl sm:text-2xl font-mono font-bold text-sky-400 mt-1">435 A</div>
+              <div id="specIncomer" class="text-[11px] font-mono text-slate-300 mt-0.5">Incomer: 630A ACB</div>
+            </div>
+
+            <div class="bg-arya-navy text-white p-3.5 rounded-xl border border-slate-800 shadow-sm">
+              <div class="text-[11px] font-mono text-slate-400 uppercase flex items-center justify-between">
+                <span>Main Busbar Size</span>
+                <i class="fa-solid fa-layer-group text-amber-400"></i>
+              </div>
+              <div id="specBusbarSize" class="text-lg sm:text-xl font-mono font-bold text-amber-400 mt-1">1Rx50x10 mm</div>
+              <div id="specBusbarMat" class="text-[11px] font-mono text-slate-300 mt-0.5">Electrolytic Cu • 800A</div>
+            </div>
+
+            <div class="bg-arya-navy text-white p-3.5 rounded-xl border border-slate-800 shadow-sm">
+              <div class="text-[11px] font-mono text-slate-400 uppercase flex items-center justify-between">
+                <span>GA Panel Size</span>
+                <i class="fa-solid fa-ruler-combined text-emerald-400"></i>
+              </div>
+              <div id="specFootprint" class="text-base sm:text-lg font-mono font-bold text-emerald-400 mt-1">2400×2100×600</div>
+              <div id="specBays" class="text-[11px] font-mono text-slate-300 mt-0.5">W×H×D (mm) • 3 Bays</div>
+            </div>
+
+            <div class="bg-gradient-to-br from-amber-500 to-amber-600 text-slate-950 p-3.5 rounded-xl shadow-sm">
+              <div class="text-[11px] font-mono font-bold uppercase flex items-center justify-between text-slate-900">
+                <span>Est. Budget Range</span>
+                <i class="fa-solid fa-indian-rupee-sign"></i>
+              </div>
+              <div id="specBudgetRange" class="text-lg sm:text-xl font-mono font-extrabold text-slate-950 mt-1">₹6.4L – ₹7.2L</div>
+              <div class="text-[11px] font-mono font-semibold text-slate-900 mt-0.5">Ex-Works Chikhali Pune</div>
+            </div>
+          </div>
+
+          <!-- LIVE INTERACTIVE CAD / SLD VIEWER CARD -->
+          <div class="bg-arya-navy rounded-xl shadow-lg border border-slate-800 overflow-hidden">
+            <!-- Blueprint Header Bar -->
+            <div class="bg-slate-900 px-4 py-3 border-b border-slate-800 flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="font-mono text-xs sm:text-sm font-bold text-white tracking-wide">LIVE E-PLAN SINGLE LINE DIAGRAM (SLD) & GA PREVIEW</span>
+              </div>
+              <div class="flex items-center gap-1.5 bg-slate-800 p-1 rounded-lg border border-slate-700">
+                <button type="button" id="btnViewSLD" onclick="switchBlueprintMode('SLD')" class="px-2.5 py-1 rounded text-xs font-mono font-semibold bg-sky-600 text-white transition">
+                  <i class="fa-solid fa-diagram-project mr-1"></i>SLD Schematic
+                </button>
+                <button type="button" id="btnViewGA" onclick="switchBlueprintMode('GA')" class="px-2.5 py-1 rounded text-xs font-mono font-semibold text-slate-300 hover:text-white transition">
+                  <i class="fa-solid fa-table-cells mr-1"></i>GA Front Elevation
+                </button>
+              </div>
+            </div>
+
+            <!-- Dynamic SVG Canvas Area -->
+            <div class="blueprint-grid p-3 sm:p-5 flex items-center justify-center min-h-[380px] relative">
+              <div id="svgBlueprintContainer" class="w-full overflow-x-auto flex justify-center">
+                <!-- Populated dynamically via JS renderLiveBlueprint() -->
+              </div>
+            </div>
+
+            <!-- Blueprint Footer Legend -->
+            <div class="bg-slate-900/95 px-4 py-2.5 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-400">
+              <div id="blueprintTitleStamp">DWG NO: ARYA-SLD-2026 | REV: 00 | MAKE: SCHNEIDER ELECTRIC</div>
+              <div class="flex items-center gap-3">
+                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-400"></span>Incomer / Busbar</span>
+                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-sky-400"></span>Metering & Protection</span>
+                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-400"></span>Outgoing Feeders</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- PRELIMINARY BILL OF MATERIALS (BOM) PREVIEW -->
+          <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="px-4 py-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <i class="fa-solid fa-clipboard-list text-sky-600"></i>
+                <h3 class="text-sm font-bold text-slate-800">Auto-Generated Preliminary Bill of Materials (BOM)</h3>
+              </div>
+              <span id="bomMakeBadge" class="text-xs font-mono font-semibold px-2.5 py-0.5 rounded bg-sky-100 text-sky-800">Schneider Electric</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr class="bg-slate-100 text-slate-600 font-mono uppercase">
+                    <th class="py-2 px-3 border-b">Sr</th>
+                    <th class="py-2 px-3 border-b">Sub-Assembly / Component</th>
+                    <th class="py-2 px-3 border-b">Technical Specification</th>
+                    <th class="py-2 px-3 border-b">Qty</th>
+                    <th class="py-2 px-3 border-b">Preferred Make</th>
+                  </tr>
+                </thead>
+                <tbody id="bomTableBody" class="divide-y divide-slate-200 text-slate-700">
+                  <!-- Populated dynamically via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- TAB 2: APFC & VFD POWER-BILL PENALTY ROI CALCULATOR                 -->
+    <!-- =================================================================== -->
+    <section id="tab-roi" class="tab-panel hidden space-y-6">
+      <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-amber-950 rounded-xl p-5 text-white shadow-md border border-slate-700 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono bg-amber-500/20 text-amber-300 border border-amber-400/30 mb-2">
+            <i class="fa-solid fa-sack-dollar"></i> MSEDCL / STATE DISCOM kVAh PENALTY & HARMONIC AUDITOR
+          </span>
+          <h2 class="text-xl font-bold">APFC & VFD Energy-Loss Payback Calculator</h2>
+          <p class="text-xs sm:text-sm text-slate-300 mt-1">
+            Show Plant Owners & Maintenance Heads exactly how much money they lose every month due to lagging Power Factor and damper-throttled pumps/blowers.
+          </p>
+        </div>
+        <button onclick="transferRoiToConfigurator('APFC')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs sm:text-sm px-4 py-2.5 rounded-lg shadow transition flex items-center gap-2 flex-shrink-0">
+          <i class="fa-solid fa-arrow-right-to-bracket"></i>
+          <span>Load Calculated APFC into Quote Engine</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- ROI Inputs (5 Cols) -->
+        <div class="lg:col-span-5 bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-4">
+          <h3 class="font-bold text-slate-800 text-base border-b border-slate-100 pb-3 flex items-center gap-2">
+            <i class="fa-solid fa-sliders text-sky-600"></i> Plant Electricity Bill & Motor Load Inputs
+          </h3>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Monthly Electricity Bill (₹)</label>
+              <input type="number" id="roiMonthlyBill" value="1800000" step="50000" oninput="calculateRoi()" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm font-mono font-bold text-slate-800 focus:ring-2 focus:ring-sky-500 focus:outline-none" />
+              <span class="text-[11px] text-slate-400">e.g. ₹18,00,000 / month</span>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Contract Demand (kVA)</label>
+              <input type="number" id="roiContractKva" value="650" step="25" oninput="calculateRoi()" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm font-mono font-bold text-slate-800 focus:ring-2 focus:ring-sky-500 focus:outline-none" />
+              <span class="text-[11px] text-slate-400">Sanctioned HT/LT Demand</span>
+            </div>
+          </div>
+
+          <!-- Current Power Factor Slider -->
+          <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200">
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-xs font-semibold uppercase text-slate-700">Current Average Power Factor (PF)</label>
+              <span id="valCurrentPf" class="font-mono font-bold text-sm text-rose-600 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">0.86 Lag</span>
+            </div>
+            <input type="range" id="roiCurrentPf" min="0.70" max="0.98" step="0.01" value="0.86" oninput="calculateRoi()" class="w-full h-2 bg-slate-200 rounded-lg cursor-pointer" />
+            <div class="flex justify-between text-[10px] font-mono text-slate-400 mt-1">
+              <span>0.70 (Severe Penalty)</span>
+              <span>0.85 (Moderate)</span>
+              <span>0.98</span>
+            </div>
+          </div>
+
+          <!-- Target Power Factor & Harmonic Profile -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Target Power Factor</label>
+              <select id="roiTargetPf" onchange="calculateRoi()" class="w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm font-mono font-semibold text-emerald-700">
+                <option value="0.995">0.995 (Unity Zero-Penalty)</option>
+                <option value="0.990">0.990 (Standard HT Target)</option>
+                <option value="0.980">0.980 (Conservative)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Plant Harmonic Distortion</label>
+              <select id="roiHarmonicReactor" onchange="calculateRoi()" class="w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-800">
+                <option value="7">7% Detuned Reactor (VFD/Process)</option>
+                <option value="14">14% Detuned Reactor (Sugar/Heavy)</option>
+                <option value="0">Standard Cylindrical (Low THD)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- VFD Pump/Blower Energy Savings Section -->
+          <div class="bg-sky-50/70 p-3.5 rounded-lg border border-sky-200 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase text-sky-900"><i class="fa-solid fa-fan mr-1 text-sky-600"></i>Centrifugal Pump / Blower / ID-FD Fan VFD Load</span>
+              <span class="text-[11px] font-mono text-sky-700">Affinity Law Audit</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-600 mb-1">Throttled Motor Load (kW)</label>
+                <input type="number" id="roiVfdKw" value="90" min="0" max="2000" step="10" oninput="calculateRoi()" class="w-full rounded border border-slate-300 bg-white px-2.5 py-1.5 text-sm font-mono font-bold text-sky-800" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-600 mb-1">Daily Running Hours</label>
+                <input type="number" id="roiHours" value="18" min="1" max="24" oninput="calculateRoi()" class="w-full rounded border border-slate-300 bg-white px-2.5 py-1.5 text-sm font-mono font-bold text-sky-800" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ROI Financial & Engineering Outputs (7 Cols) -->
+        <div class="lg:col-span-7 space-y-5">
+          <!-- Top 3 Financial Highlight Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-white rounded-xl p-4 border-l-4 border-rose-500 shadow-sm">
+              <div class="text-xs font-semibold text-slate-500 uppercase">Current Monthly Wastage</div>
+              <div id="roiOutMonthlySavings" class="text-2xl font-mono font-extrabold text-rose-600 mt-1">₹2,84,500 /mo</div>
+              <div id="roiOutBreakdown" class="text-[11px] text-slate-500 mt-1">PF Penalty + VFD Losses</div>
+            </div>
+
+            <div class="bg-white rounded-xl p-4 border-l-4 border-emerald-500 shadow-sm">
+              <div class="text-xs font-semibold text-slate-500 uppercase">12-Month Net Savings</div>
+              <div id="roiOutAnnualSavings" class="text-2xl font-mono font-extrabold text-emerald-600 mt-1">₹34,14,000 /yr</div>
+              <div class="text-[11px] text-slate-500 mt-1">Direct Bottom-Line Profit</div>
+            </div>
+
+            <div class="bg-arya-navy text-white rounded-xl p-4 border-l-4 border-amber-400 shadow-sm">
+              <div class="text-xs font-mono text-amber-300 uppercase">Payback Period</div>
+              <div id="roiOutPayback" class="text-2xl font-mono font-extrabold text-amber-400 mt-1">3.4 Months</div>
+              <div id="roiOutInvestment" class="text-[11px] font-mono text-slate-300 mt-1">Est. Capex: ₹9.65 Lakhs</div>
+            </div>
+          </div>
+
+          <!-- Recommended Engineering Solution Card -->
+          <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+              <div>
+                <h3 class="font-bold text-slate-800 text-base">Aryavarta Recommended Turnkey Remedy</h3>
+                <p class="text-xs text-slate-500">Custom-designed at our Chikhali, Pune facility with E-Plan documentation</p>
+              </div>
+              <span class="px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 font-mono text-xs font-bold">100% Tax Depreciable Energy Asset</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="bg-slate-50 rounded-lg p-4 border border-slate-200">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-mono uppercase text-sky-700 font-bold">1. Automatic Power Factor Panel</span>
+                  <i class="fa-solid fa-bolt text-amber-500"></i>
+                </div>
+                <div id="roiRecApfcSize" class="text-xl font-mono font-extrabold text-slate-900 mt-1">325 kVAR APFC Panel</div>
+                <p id="roiRecApfcSpec" class="text-xs text-slate-600 mt-1">
+                  With 7% Copper Detuned Harmonic Reactors, 480V/525V Heavy-Duty MPP Capacitors & 12-Step Microprocessor Relay.
+                </p>
+                <div class="mt-3 pt-2 border-t border-slate-200 flex justify-between items-center text-xs font-mono">
+                  <span class="text-slate-500">Monthly PF Savings:</span>
+                  <span id="roiOutPfSavingsOnly" class="font-bold text-emerald-700">₹2,16,000 /mo</span>
+                </div>
+              </div>
+
+              <div class="bg-slate-50 rounded-lg p-4 border border-slate-200">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-mono uppercase text-indigo-700 font-bold">2. Closed-Loop VFD Automation</span>
+                  <i class="fa-solid fa-wave-square text-indigo-500"></i>
+                </div>
+                <div id="roiRecVfdSize" class="text-xl font-mono font-extrabold text-slate-900 mt-1">90 kW VFD Panel</div>
+                <p class="text-xs text-slate-600 mt-1">
+                  PID Pressure/Flow Closed-Loop VFD Panel with Input AC Line Choke, Forced Cooling & Bypass Contactor Arrangement.
+                </p>
+                <div class="mt-3 pt-2 border-t border-slate-200 flex justify-between items-center text-xs font-mono">
+                  <span class="text-slate-500">Monthly kWh Savings:</span>
+                  <span id="roiOutVfdSavingsOnly" class="font-bold text-emerald-700">₹68,500 /mo</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Visual Cashflow vs Investment Bar Chart -->
+            <div class="pt-2 space-y-2">
+              <div class="text-xs font-semibold text-slate-700 uppercase">Visual ROI Comparison (Turnkey Investment vs. 12-Month Savings)</div>
+              <div class="space-y-2">
+                <div>
+                  <div class="flex justify-between text-xs font-mono mb-1">
+                    <span class="text-slate-600">Estimated Turnkey Panel Investment (One-Time)</span>
+                    <span id="barLblInvest" class="font-bold text-slate-800">₹9,65,000</span>
+                  </div>
+                  <div class="w-full bg-slate-100 h-4 rounded-full overflow-hidden">
+                    <div id="barWidthInvest" class="bg-amber-500 h-full rounded-full transition-all duration-300" style="width: 28%"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs font-mono mb-1">
+                    <span class="text-emerald-700 font-semibold">12-Month Guaranteed Electricity Bill Savings</span>
+                    <span id="barLblSavings" class="font-bold text-emerald-700">₹34,14,000</span>
+                  </div>
+                  <div class="w-full bg-slate-100 h-4 rounded-full overflow-hidden">
+                    <div class="bg-emerald-500 h-full rounded-full w-full"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="pt-3 flex flex-wrap gap-3">
+              <button onclick="transferRoiToConfigurator('APFC')" class="flex-1 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs sm:text-sm py-2.5 px-4 rounded-lg shadow transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-Sliders"></i>
+                <span>Configure This APFC Panel & Get PDF Quote</span>
+              </button>
+              <button onclick="transferRoiToConfigurator('VFD')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs sm:text-sm py-2.5 px-4 rounded-lg shadow transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-wave-square"></i>
+                <span>Configure VFD Panel</span>
+              </button>
+              <button onclick="shareRoiOnWhatsApp()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm py-2.5 px-4 rounded-lg shadow transition flex items-center justify-center gap-2">
+                <i class="fa-brands fa-whatsapp text-base"></i>
+                <span>Send ROI Audit on WhatsApp</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- TAB 3: PAN-INDIA PROJECT RADAR & OUTBOUND COMMAND CENTER            -->
+    <!-- =================================================================== -->
+    <section id="tab-radar" class="tab-panel hidden space-y-6">
+      <!-- Radar Header -->
+      <div class="bg-arya-navy rounded-xl p-5 text-white shadow-md border border-slate-800 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div>
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 mb-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> REAL PUBLIC BUYING SIGNALS • ZERO API COST
+          </span>
+          <h2 class="text-xl font-bold">Pan-India Industrial Expansion, Breakdown & Tender Radar</h2>
+          <p class="text-xs sm:text-sm text-slate-300 mt-1">
+            Select an industrial belt below and launch live Google News & Tender intelligence searches to catch new factories, expansions, and electrical fire replacements before competitors.
+          </p>
+        </div>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <label class="text-xs font-mono text-slate-300">Target Belt:</label>
+          <select id="radarRegionSelect" onchange="renderRadarCards()" class="rounded-lg bg-slate-800 border border-slate-600 text-white text-xs sm:text-sm font-semibold px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-400">
+            <option value="Maharashtra OR Pune OR Chakan OR Bhosari OR Ranjangaon">Pune / Chakan / Bhosari / Ranjangaon MIDC</option>
+            <option value="Kolhapur OR Sangli OR Satara OR Solapur OR Baramati">Western MH Sugar & Ethanol Belt (Kolhapur/Sangli/Solapur)</option>
+            <option value="Aurangabad OR Sambhajinagar OR Waluj OR Jalna">Sambhajinagar / Waluj / Marathwada MIDC</option>
+            <option value="Nagpur OR Butibori OR Hingna OR Amravati">Nagpur / Butibori / Vidarbha Industrial Hub</option>
+            <option value="Nashik OR Ambad OR Satpur OR Ahmednagar">Nashik / Ambad / Satpur MIDC</option>
+            <option value="India OR Maharashtra OR Gujarat OR Karnataka">Pan-India Industrial Projects</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 4 Live Intelligence Signal Launchers -->
+      <div id="radarLauncherGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Populated dynamically via JS renderRadarCards() -->
+      </div>
+
+      <!-- CRM & Outbound Pipeline Table -->
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="p-4 sm:p-5 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div>
+            <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
+              <i class="fa-solid fa-users-gear text-sky-600"></i>
+              <span>Active Industrial Lead & Outbound CRM Pipeline</span>
+            </h3>
+            <p class="text-xs text-slate-500">Includes live inbound leads from Tab 1 + high-intent project leads discovered from the Radar</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <input type="text" id="crmSearchInput" oninput="renderCrmTable()" placeholder="Search company, MIDC, panel..." class="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-sky-500" />
+            <select id="crmFilterIndustry" onchange="renderCrmTable()" class="rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700">
+              <option value="ALL">All Industries</option>
+              <option value="Sugar & Ethanol Distillery">Sugar & Ethanol</option>
+              <option value="Dairy & Milk Processing">Dairy & Milk</option>
+              <option value="Brewery Industries">Brewery</option>
+              <option value="Edible Oil Refinery">Edible Oil</option>
+              <option value="Water Treatment (ETP/STP)">Water / ETP / STP</option>
+              <option value="MIDC Manufacturing Plant">MIDC Manufacturing</option>
+            </select>
+            <button onclick="openAddLeadModal()" class="bg-sky-600 hover:bg-sky-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-sm transition flex items-center gap-1.5">
+              <i class="fa-solid fa-plus"></i> Add Radar Lead
+            </button>
+            <button onclick="exportCrmToCsv()" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-sm transition flex items-center gap-1.5">
+              <i class="fa-solid fa-file-csv text-emerald-400"></i> Export CSV for Sheets
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-slate-100 text-slate-600 font-mono uppercase border-b border-slate-200">
+                <th class="py-3 px-4">Date / Source</th>
+                <th class="py-3 px-4">Company & Location</th>
+                <th class="py-3 px-4">Contact Person</th>
+                <th class="py-3 px-4">Industry & Requirement</th>
+                <th class="py-3 px-4">Est. Value</th>
+                <th class="py-3 px-4">Stage</th>
+                <th class="py-3 px-4 text-right">1-Click Outbound Actions</th>
+              </tr>
+            </thead>
+            <tbody id="crmTableBody" class="divide-y divide-slate-200 text-slate-700">
+              <!-- Populated dynamically via JS renderCrmTable() -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- TAB 4: GOOGLE SHEETS WEBHOOK & MARKETING TOOLKIT                    -->
+    <!-- =================================================================== -->
+    <section id="tab-toolkit" class="tab-panel hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left 6 Cols: Google Sheets Webhook Connector & Apps Script -->
+        <div class="lg:col-span-6 space-y-6">
+          <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg">
+                  <i class="fa-solid fa-table"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold text-slate-900 text-base">Google Sheets Live Webhook Connection</h3>
+                  <p class="text-xs text-slate-500">Automatically sync every Tab 1 calculator lead straight to your Google Sheet</p>
+                </div>
+              </div>
+              <span id="webhookStatusBadge" class="px-2.5 py-1 rounded-full text-[11px] font-mono font-semibold bg-amber-100 text-amber-800">Local CRM Mode</span>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Google Apps Script Web App URL (`https://script.google.com/macros/s/.../exec`)</label>
+              <div class="flex gap-2">
+                <input type="url" id="webhookUrlInput" placeholder="https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec" class="flex-1 rounded-lg border border-slate-300 px-3 py-2 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-sky-500" />
+                <button onclick="saveWebhookUrl()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs px-4 py-2 rounded-lg shadow transition">
+                  Save URL
+                </button>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-1.5">
+                Even if left blank, all leads are safely stored in your browser's Tab 3 CRM table and can be exported to CSV anytime.
+              </p>
+            </div>
+
+            <div class="flex items-center justify-between pt-2 border-t border-slate-100">
+              <button onclick="testWebhookConnection()" class="text-xs font-semibold text-sky-700 hover:text-sky-800 flex items-center gap-1.5">
+                <i class="fa-solid fa-paper-plane"></i> Send Test Lead Payload
+              </button>
+              <button onclick="copyAppsScriptCode()" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-mono px-3 py-1.5 rounded-lg flex items-center gap-1.5">
+                <i class="fa-regular fa-copy"></i> Copy Google Apps Script Code
+              </button>
+            </div>
+
+            <!-- Collapsible Apps Script Reference -->
+            <details class="bg-slate-900 text-slate-200 rounded-lg p-3 text-xs font-mono">
+              <summary class="cursor-pointer text-sky-400 font-semibold">View 3-Step Google Sheet Setup & Apps Script Code</summary>
+              <ol class="list-decimal list-inside space-y-1 text-slate-300 mt-2 mb-3 text-[11px] font-sans">
+                <li>Create a Google Sheet with a tab named <code class="text-amber-300">Inbound_Leads</code>.</li>
+                <li>Click <b>Extensions &rarr; Apps Script</b>, paste the code below, and click <b>Deploy &rarr; New Deployment &rarr; Web App</b> (Execute as: <i>Me</i>, Access: <i>Anyone</i>).</li>
+                <li>Paste the generated Web App URL in the box above and click <b>Save URL</b>.</li>
+              </ol>
+              <pre id="appsScriptCodeBlock" class="overflow-x-auto text-[11px] text-emerald-300 bg-slate-950 p-3 rounded border border-slate-800">function doPost(e) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName("Inbound_Leads") || ss.insertSheet("Inbound_Leads");
+  var d = JSON.parse(e.postData.contents);
+  sheet.appendRow([
+    new Date(), d.name, d.company, d.location, d.phone, d.email,
+    d.industry, d.panelType, d.ratingKw + " kW", d.make, d.estimatedBudget
+  ]);
+  return ContentService.createTextOutput(JSON.stringify({status:"ok"}))
+    .setMimeType(ContentService.MimeType.JSON);
+}</pre>
+            </details>
+          </div>
+
+          <!-- Printable QR Panel Sticker Generator -->
+          <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
+                  <i class="fa-solid fa-qrcode text-purple-600"></i>
+                  <span>Printable Panel QR Sticker Generator</span>
+                </h3>
+                <p class="text-xs text-slate-500">Paste on every delivered MCC/PCC/APFC panel so factory engineers scan for instant quotes & support</p>
+              </div>
+              <button onclick="printQrSticker()" class="bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold px-3.5 py-2 rounded-lg shadow transition flex items-center gap-1.5">
+                <i class="fa-solid fa-print"></i> Print Sticker Plate
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">QR Target URL (Calculator / Website)</label>
+                <input type="text" id="qrUrlInput" value="https://www.aryavartaautomation.in/" oninput="updateQrStickerPreview()" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-mono" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Panel Serial / Project Tag</label>
+                <input type="text" id="qrSerialInput" value="ARYA-PNQ-2026-MCC01" oninput="updateQrStickerPreview()" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-mono" />
+              </div>
+            </div>
+
+            <!-- Metallic Industrial QR Plate Preview -->
+            <div id="qrStickerPreviewCard" class="bg-slate-900 text-white rounded-xl p-4 border-2 border-amber-400 shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div class="space-y-1.5 text-center sm:text-left">
+                <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-amber-400 text-slate-950 font-mono font-bold text-[10px] uppercase">
+                  ISO 9001:2015 & ISO 14001:2015 CERTIFIED
+                </div>
+                <div class="text-base font-extrabold tracking-tight text-white">ARYAVARTA AUTOMATION</div>
+                <div class="text-xs text-sky-300 font-medium">Scan for 60-Sec Panel Quote, SLD & Power Audit</div>
+                <div id="qrPlateSerial" class="text-[11px] font-mono text-slate-400">PANEL ID: ARYA-PNQ-2026-MCC01</div>
+                <div class="text-xs font-mono text-amber-400 font-bold pt-1">
+                  <i class="fa-solid fa-phone-volume mr-1"></i>24x7 Support: +91 9766037466
+                </div>
+              </div>
+              <div class="bg-white p-2.5 rounded-lg shadow-inner flex-shrink-0 flex flex-col items-center">
+                <div id="qrCodeCanvasContainer" class="w-28 h-28 flex items-center justify-center">
+                  <!-- Populated by SVG QR Matrix Generator -->
+                </div>
+                <span class="text-[9px] font-mono font-bold text-slate-800 mt-1">SCAN WITH PHONE</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right 6 Cols: Ready-to-Send High-Converting WhatsApp & Email Scripts -->
+        <div class="lg:col-span-6 space-y-4">
+          <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-4">
+            <div>
+              <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
+                <i class="fa-brands fa-whatsapp text-emerald-600 text-lg"></i>
+                <span>High-Converting Outbound Campaign Templates</span>
+              </h3>
+              <p class="text-xs text-slate-500">Click any script below to copy or launch directly on WhatsApp to your prospects</p>
+            </div>
+
+            <div id="marketingTemplatesContainer" class="space-y-3">
+              <!-- Populated via JS renderMarketingTemplates() -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- OFFICIAL PRINTABLE PROPOSAL & SLD MODAL                               -->
+  <!-- ===================================================================== -->
+  <div id="proposalModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm overflow-y-auto p-3 sm:p-6 flex items-start justify-center">
+    <div class="bg-white rounded-xl shadow-2xl max-w-4xl w-full overflow-hidden border border-slate-300 my-4">
+      
+      <!-- Modal Action Bar (Hidden when printing) -->
+      <div class="bg-arya-navy text-white px-5 py-3.5 flex flex-wrap items-center justify-between gap-3 no-print">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-file-circle-check text-emerald-400 text-lg"></i>
+          <span class="font-bold text-sm">Official Aryavarta Budgetary Proposal Ready</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="window.print()" class="bg-sky-500 hover:bg-sky-400 text-white font-bold text-xs px-4 py-2 rounded-lg shadow flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-print"></i> Print / Save as PDF
+          </button>
+          <button onclick="sendConfigToWhatsApp()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-3.5 py-2 rounded-lg shadow flex items-center gap-1.5 transition">
+            <i class="fa-brands fa-whatsapp"></i> Send on WhatsApp
+          </button>
+          <button onclick="closeProposalModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-3 py-2 rounded-lg">
+            <i class="fa-solid fa-xmark"></i> Close
+          </button>
+        </div>
+      </div>
+
+      <!-- PRINTABLE DOCUMENT SHEET -->
+      <div id="printableProposalArea" class="p-6 sm:p-8 space-y-6 bg-white text-slate-900">
+        <!-- Letterhead -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b-2 border-slate-900 pb-4 gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-2xl font-extrabold tracking-tight text-slate-900">ARYAVARTA AUTOMATION</h1>
+              <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-slate-900 text-amber-400 rounded">ISO 9001:2015 & 14001:2015</span>
+            </div>
+            <p class="text-xs text-slate-600 font-medium mt-0.5">
+              Turnkey Electrical, Instrumentation & Automation Solutions | E-Plan Schematic Design
+            </p>
+            <p class="text-xs text-slate-500 mt-0.5">
+              Works: Chikhali, Pune - 411062, Maharashtra, India | Web: www.aryavartaautomation.in
+            </p>
+            <p class="text-xs font-mono text-slate-700 mt-0.5">
+              Mob: +91 9766037466 / +91 7028962982 | Email: aryavartapune@gmail.com
+            </p>
+          </div>
+          <div class="text-left sm:text-right font-mono text-xs bg-slate-100 p-3 rounded-lg border border-slate-300">
+            <div class="font-bold text-slate-900" id="propRefNo">REF: ARYA/QTN/2026/1084</div>
+            <div class="text-slate-600" id="propDate">DATE: 14 NOV 2026</div>
+            <div class="text-emerald-700 font-bold mt-1">VALIDITY: 30 DAYS</div>
+          </div>
+        </div>
+
+        <!-- Client & Project Summary -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-lg border border-slate-200 text-xs">
+          <div>
+            <div class="text-[10px] font-mono uppercase text-slate-400 font-bold">Submitted To:</div>
+            <div class="font-bold text-sm text-slate-900 mt-0.5" id="propClientName">Valued Project Partner</div>
+            <div class="font-semibold text-slate-700" id="propClientCompany">Industrial Plant Facility</div>
+            <div class="text-slate-600" id="propClientContact">Location: MIDC Maharashtra</div>
+          </div>
+          <div>
+            <div class="text-[10px] font-mono uppercase text-slate-400 font-bold">Project Configuration Summary:</div>
+            <div class="font-bold text-sm text-sky-800 mt-0.5" id="propSystemTitle">MCC Panel - 250 kW</div>
+            <div class="text-slate-700" id="propIndustrySector">Sector: Sugar & Ethanol Distillery</div>
+            <div class="font-mono font-bold text-slate-900 mt-1" id="propBudgetSummary">Budgetary Estimate: ₹6.40 Lakhs – ₹7.20 Lakhs</div>
+          </div>
+        </div>
+
+        <!-- Technical Parameters Table -->
+        <div>
+          <h3 class="text-xs font-mono uppercase font-bold text-slate-700 mb-2">1. Technical Design Basis & Sizing Parameters</h3>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs border border-slate-300 rounded-lg p-3 bg-white">
+            <div>
+              <span class="text-slate-500 block">Connected Load:</span>
+              <strong class="font-mono text-slate-900" id="propSpecLoad">250 kW (435 A)</strong>
+            </div>
+            <div>
+              <span class="text-slate-500 block">Main Incomer:</span>
+              <strong class="font-mono text-slate-900" id="propSpecIncomer">630A ACB 4P 50kA</strong>
+            </div>
+            <div>
+              <span class="text-slate-500 block">Busbar Specification:</span>
+              <strong class="font-mono text-slate-900" id="propSpecBusbar">Electrolytic Cu (1Rx50x10mm)</strong>
+            </div>
+            <div>
+              <span class="text-slate-500 block">Enclosure & Dimensions:</span>
+              <strong class="font-mono text-slate-900" id="propSpecEnclosure">IP54 • 2400x2100x600mm</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Embedded SLD Diagram inside Printable Proposal -->
+        <div>
+          <h3 class="text-xs font-mono uppercase font-bold text-slate-700 mb-2">2. Preliminary Single Line Diagram (SLD) Block Schematic</h3>
+          <div id="propSldContainer" class="bg-slate-900 p-3 rounded-lg border border-slate-300 flex justify-center overflow-x-auto">
+            <!-- Cloned SVG inserted via JS -->
+          </div>
+        </div>
+
+        <!-- Detailed Bill of Materials -->
+        <div>
+          <h3 class="text-xs font-mono uppercase font-bold text-slate-700 mb-2">3. Preliminary Bill of Materials (BOM)</h3>
+          <table class="w-full text-left border-collapse text-xs border border-slate-300">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700 font-mono uppercase">
+                <th class="py-2 px-3 border">Sr</th>
+                <th class="py-2 px-3 border">Item Description</th>
+                <th class="py-2 px-3 border">Technical Rating</th>
+                <th class="py-2 px-3 border">Qty</th>
+                <th class="py-2 px-3 border">Make</th>
+              </tr>
+            </thead>
+            <tbody id="propBomBody" class="divide-y divide-slate-200">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Standard Commercial Terms -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-[11px] text-slate-600 border-t border-slate-200 pt-4">
+          <div>
+            <strong class="text-slate-900 uppercase font-mono block mb-1">Commercial Terms & Conditions:</strong>
+            <ul class="list-disc list-inside space-y-0.5">
+              <li><b>Price Basis:</b> Ex-Works Chikhali, Pune (Packing, Forwarding & Freight extra at actuals).</li>
+              <li><b>Taxes:</b> GST @ 18% extra as applicable.</li>
+              <li><b>Delivery:</b> 3 to 5 Weeks from approval of E-Plan GA & SLD drawings.</li>
+              <li><b>Warranty:</b> 12 Months from commissioning or 18 months from supply.</li>
+            </ul>
+          </div>
+          <div class="flex flex-col justify-between sm:text-right">
+            <div>
+              <strong class="text-slate-900 uppercase font-mono block mb-1">Scope Includes:</strong>
+              <p>Complete E-Plan P8 Schematic Drawings, Ferrule Marking, Routine Test Certificate as per IS 8623 / IEC 61439.</p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-slate-200 font-bold text-slate-900">
+              For ARYAVARTA AUTOMATION • Authorized Signatory
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- ADD NEW RADAR LEAD MODAL                                              -->
+  <!-- ===================================================================== -->
+  <div id="addLeadModal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm p-4 flex items-center justify-center no-print">
+    <div class="bg-white rounded-xl shadow-xl max-w-md w-full p-5 space-y-4 border border-slate-200">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="font-bold text-slate-900 text-base">Add New Project Lead to Pipeline</h3>
+        <button onclick="closeAddLeadModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form onsubmit="saveManualRadarLead(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Company / Factory Name *</label>
+          <input type="text" id="manCompany" required placeholder="e.g. Baramati Agro Ethanol Unit" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Contact Person *</label>
+            <input type="text" id="manName" required placeholder="e.g. Mr. Kulkarni (GM)" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">WhatsApp Phone *</label>
+            <input type="tel" id="manPhone" required placeholder="98220XXXXX" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm font-mono" />
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Location / MIDC</label>
+            <input type="text" id="manLocation" required placeholder="Ranjangaon MIDC" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Industry</label>
+            <select id="manIndustry" class="w-full rounded-lg border border-slate-300 px-2.5 py-2 text-sm">
+              <option value="Sugar & Ethanol Distillery">Sugar & Ethanol Distillery</option>
+              <option value="Dairy & Milk Processing">Dairy & Milk Processing</option>
+              <option value="Brewery Industries">Brewery Industries</option>
+              <option value="Edible Oil Refinery">Edible Oil Refinery</option>
+              <option value="Water Treatment (ETP/STP)">Water Treatment (ETP/STP)</option>
+              <option value="MIDC Manufacturing Plant">MIDC Manufacturing Plant</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Panel Requirement</label>
+            <input type="text" id="manRequirement" required placeholder="PCC & 300 kVAR APFC Panel" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Est. Value (INR)</label>
+            <input type="text" id="manBudget" required placeholder="₹8.50 Lakhs" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm font-mono" />
+          </div>
+        </div>
+        <div class="pt-2 flex justify-end gap-2">
+          <button type="button" onclick="closeAddLeadModal()" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-600 font-semibold">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-bold">Save Lead</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- TOAST NOTIFICATION CONTAINER                                          -->
+  <!-- ===================================================================== -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0 no-print"></div>
+
+  <!-- ===================================================================== -->
+  <!-- FOOTER                                                                -->
+  <!-- ===================================================================== -->
+  <footer class="bg-slate-900 text-slate-400 border-t border-slate-800 py-5 mt-10 text-xs no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div>
+        <strong class="text-white">Aryavarta Automation</strong> • Chikhali, Pune | ISO 9001:2015 & ISO 14001:2015 Certified
+      </div>
+      <div class="flex items-center gap-4 font-mono">
+        <span><i class="fa-solid fa-envelope text-sky-400 mr-1"></i>aryavartapune@gmail.com</span>
+        <span><i class="fa-solid fa-phone text-emerald-400 mr-1"></i>+91 9766037466</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================================================================== -->
+  <!-- APPLICATION JAVASCRIPT ENGINE                                         -->
+  <!-- ===================================================================== -->
+  <script>
+    // -----------------------------------------------------------------------
+    // GLOBAL STATE & INITIALIZATION
+    // -----------------------------------------------------------------------
+    let currentBlueprintMode = 'SLD'; // 'SLD' or 'GA'
+    let currentCalculatedSpecs = {};
+
+    // Pre-populated realistic industrial leads for Aryavarta Automation
+    const defaultCrmLeads = [
+      {
+        id: 'LD-101',
+        date: 'Today, 09:15 AM',
+        source: 'Inbound Calculator',
+        name: 'Sandeep Patil (GM Engg)',
+        company: 'Kranti Sugar & Ethanol Distillery',
+        location: 'Kolhapur / Sangli',
+        phone: '9822011223',
+        email: 'projects@krantisugar.in',
+        industry: 'Sugar & Ethanol Distillery',
+        panelType: 'PCC Panel',
+        requirement: '1250 kW PCC Panel (2500A ACB, Cu Busbar)',
+        budget: '₹18.4L – ₹20.5L',
+        status: 'NEW - HOT LEAD'
+      },
+      {
+        id: 'LD-102',
+        date: 'Today, 08:30 AM',
+        source: 'MIDC Radar Alert',
+        name: 'Vikram Joshi (Maint. Head)',
+        company: 'Govind Milk & Dairy Products',
+        location: 'Ranjangaon MIDC, Pune',
+        phone: '9766037466',
+        email: 'maintenance@govindmilk.com',
+        industry: 'Dairy & Milk Processing',
+        panelType: 'PLC & SCADA Automation Panel',
+        requirement: 'SS-304 Hygienic PLC/SCADA Pasteurizer & CIP Panel',
+        budget: '₹11.2L – ₹12.8L',
+        status: 'NEW - HOT LEAD'
+      },
+      {
+        id: 'LD-103',
+        date: 'Yesterday',
+        source: 'APFC Penalty Audit',
+        name: 'AnilKishor Sharma',
+        company: 'Deccan Auto Stamping Pvt Ltd',
+        location: 'Chakan MIDC Phase II, Pune',
+        phone: '9850044556',
+        email: 'utility@deccanauto.in',
+        industry: 'MIDC Manufacturing Plant',
+        panelType: 'APFC Panel',
+        requirement: '400 kVAR APFC Panel (7% Detuned Harmonic Reactor)',
+        budget: '₹5.8L – ₹6.5L',
+        status: 'QUOTE SENT'
+      },
+      {
+        id: 'LD-104',
+        date: 'Yesterday',
+        source: 'Project Expansion Radar',
+        name: 'Prashant Deshmukh',
+        company: 'Vidarbha Solvex & Edible Oils',
+        location: 'Butibori MIDC, Nagpur',
+        phone: '9422188990',
+        email: 'planthead@vidarbhaoils.in',
+        industry: 'Edible Oil Refinery',
+        panelType: 'MCC Panel',
+        requirement: '450 kW Flameproof/IP55 Solvent Extraction MCC',
+        budget: '₹9.6L – ₹10.9L',
+        status: 'FOLLOW-UP'
+      },
+      {
+        id: 'LD-105',
+        date: '2 Days Ago',
+        source: 'Tender Radar',
+        name: 'Deepak Kadam (Project Consultant)',
+        company: 'AquaPure ETP & Cetp Infrastructure',
+        location: 'Waluj MIDC, Sambhajinagar',
+        phone: '9923077889',
+        email: 'tenders@aquapureinfra.com',
+        industry: 'Water Treatment (ETP/STP)',
+        panelType: 'VFD Panel',
+        requirement: '160 kW VFD Blower & Pump Control Panel (Siemens)',
+        budget: '₹7.4L – ₹8.3L',
+        status: 'QUOTE SENT'
+      }
+    ];
+
+    let crmLeads = [];
+
+    // -----------------------------------------------------------------------
+    // UTILITY: TOAST MESSAGE & CLIPBOARD COPY (NO ALERT/CONFIRM)
+    // -----------------------------------------------------------------------
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      const bgClass = type === 'success' ? 'bg-slate-900 border-emerald-500' : 'bg-slate-900 border-amber-500';
+      const iconClass = type === 'success' ? 'fa-circle-check text-emerald-400' : 'fa-circle-info text-amber-400';
+
+      toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl shadow-xl border-l-4 ${bgClass} text-white text-xs sm:text-sm transition-all duration-300`;
+      toast.innerHTML = `
+        <i class="fa-solid ${iconClass} text-base flex-shrink-0"></i>
+        <div class="flex-1 font-medium">${message}</div>
+      `;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(8px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3800);
+    }
+
+    function copyTextToClipboard(text, successMsg = 'Copied to clipboard!') {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-9999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        showToast(successMsg, 'success');
+      } catch (err) {
+        showToast('Unable to copy automatically. Please select and copy.', 'info');
+      }
+      document.body.removeChild(textArea);
+    }
+
+    // -----------------------------------------------------------------------
+    // TAB NAVIGATION
+    // -----------------------------------------------------------------------
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.add('hidden'));
+      document.getElementById(tabId).classList.remove('hidden');
+
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('border-sky-400', 'bg-slate-800/90', 'text-white');
+        btn.classList.add('border-transparent', 'text-slate-400');
+      });
+
+      const activeBtn = document.getElementById('btn-' + tabId);
+      if (activeBtn) {
+        activeBtn.classList.remove('border-transparent', 'text-slate-400');
+        activeBtn.classList.add('border-sky-400', 'bg-slate-800/90', 'text-white');
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // TAB 1: 60-SECOND PANEL CONFIGURATOR & ENGINEERING ENGINE
+    // -----------------------------------------------------------------------
+    function selectPanelType(type) {
+      document.getElementById('cfgPanelType').value = type;
+      document.querySelectorAll('.panel-type-btn').forEach(btn => {
+        if (btn.getAttribute('data-type') === type) {
+          btn.className = 'panel-type-btn px-3 py-2 rounded-lg border-2 text-xs font-semibold text-left transition flex flex-col justify-between bg-sky-50 border-sky-600 text-sky-900 shadow-sm';
+          if (type === 'PLC & SCADA Automation Panel') {
+            btn.className = 'panel-type-btn col-span-2 sm:col-span-2 px-3 py-2 rounded-lg border-2 text-xs font-semibold text-left transition flex items-center gap-2 bg-sky-50 border-sky-600 text-sky-900 shadow-sm';
+          }
+        } else {
+          btn.className = 'panel-type-btn px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 text-xs font-semibold text-left transition flex flex-col justify-between';
+          if (btn.getAttribute('data-type') === 'PLC & SCADA Automation Panel') {
+            btn.className = 'panel-type-btn col-span-2 sm:col-span-2 px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 text-xs font-semibold text-left transition flex items-center gap-2';
+          }
+        }
+      });
+
+      // Adjust labels based on panel type
+      const lblRating = document.getElementById('lblLoadRating');
+      const lblUnit = document.getElementById('lblLoadUnit');
+      const lblFeeders = document.getElementById('lblFeederCount');
+      if (type === 'APFC Panel') {
+        lblRating.textContent = '3. Total Reactive Bank Rating (kVAR)';
+        lblUnit.textContent = 'kVAR';
+        lblFeeders.textContent = '7. Capacitor Steps / Banks';
+      } else if (type === 'PLC & SCADA Automation Panel') {
+        lblRating.textContent = '3. Controlled Plant Load (kW)';
+        lblUnit.textContent = 'kW';
+        lblFeeders.textContent = '7. PLC I/O Modules (x16 Ch)';
+      } else {
+        lblRating.textContent = '3. Total Connected Load (kW)';
+        lblUnit.textContent = 'kW';
+        lblFeeders.textContent = '7. Outgoing Feeders';
+      }
+      updateConfiguration();
+    }
+
+    function syncLoadFromSlider(val) {
+      document.getElementById('cfgLoadInput').value = val;
+      updateConfiguration();
+    }
+
+    function syncLoadFromNumber(val) {
+      let num = parseInt(val, 10) || 15;
+      if (num < 15) num = 15;
+      if (num > 2500) num = 2500;
+      document.getElementById('cfgLoadSlider').value = num;
+      updateConfiguration();
+    }
+
+    function resetConfigurator() {
+      document.getElementById('cfgIndustry').value = 'Sugar & Ethanol Distillery';
+      selectPanelType('MCC Panel');
+      document.getElementById('cfgLoadInput').value = 250;
+      document.getElementById('cfgLoadSlider').value = 250;
+      document.getElementById('cfgMake').value = 'Schneider Electric';
+      document.getElementById('cfgBusbar').value = 'Electrolytic Copper';
+      document.getElementById('cfgEnclosure').value = 'IP54 Indoor (CRCA 14/16 SWG)';
+      document.getElementById('cfgFeeders').value = 12;
+      updateConfiguration();
+      showToast('Configurator reset to default 250 kW MCC specification.');
+    }
+
+    function switchBlueprintMode(mode) {
+      currentBlueprintMode = mode;
+      const btnSLD = document.getElementById('btnViewSLD');
+      const btnGA = document.getElementById('btnViewGA');
+      if (mode === 'SLD') {
+        btnSLD.className = 'px-2.5 py-1 rounded text-xs font-mono font-semibold bg-sky-600 text-white transition';
+        btnGA.className = 'px-2.5 py-1 rounded text-xs font-mono font-semibold text-slate-300 hover:text-white transition';
+      } else {
+        btnGA.className = 'px-2.5 py-1 rounded text-xs font-mono font-semibold bg-sky-600 text-white transition';
+        btnSLD.className = 'px-2.5 py-1 rounded text-xs font-mono font-semibold text-slate-300 hover:text-white transition';
+      }
+      renderLiveBlueprint();
+    }
+
+    function updateConfiguration() {
+      const industry = document.getElementById('cfgIndustry').value;
+      const panelType = document.getElementById('cfgPanelType').value;
+      const loadKw = parseFloat(document.getElementById('cfgLoadInput').value) || 100;
+      const make = document.getElementById('cfgMake').value;
+      const busbarMat = document.getElementById('cfgBusbar').value;
+      const enclosure = document.getElementById('cfgEnclosure').value;
+      const feeders = parseInt(document.getElementById('cfgFeeders').value, 10) || 8;
+
+      document.getElementById('valFeederCount').textContent =
+        panelType === 'APFC Panel' ? `${feeders} Steps` :
+        panelType === 'PLC & SCADA Automation Panel' ? `${feeders} Racks/Mods` : `${feeders} Nos`;
+
+      // 1. Calculate Full Load Current (Amps) at 415V 3-Ph (I = P / (1.732 * 0.415 * 0.85))
+      const fullLoadAmps = Math.round(loadKw * 1.68);
+      const designAmps = Math.round(fullLoadAmps * 1.25); // 125% continuous margin
+
+      // 2. Select Standard Breaker Rating & Type (MCCB vs ACB)
+      const stdRatings = [63, 100, 160, 250, 400, 630, 800, 1000, 1250, 1600, 2000, 2500, 3200, 4000, 5000];
+      let breakerRating = stdRatings.find(r => r >= designAmps) || 5000;
+      let breakerType = breakerRating >= 630 ? 'ACB (4P, 50kA, Microprocessor Release)' : 'MCCB (4P, 36kA, Thermal-Magnetic)';
+      let shortBreakerLabel = `${breakerRating}A ${breakerRating >= 630 ? 'ACB' : 'MCCB'}`;
+
+      // 3. Calculate Busbar Cross-Section (Current density: Copper ~1.4 A/mm², Aluminium ~0.85 A/mm²)
+      const currentDensity = busbarMat.includes('Copper') ? 1.4 : 0.85;
+      const reqAreaMm2 = Math.ceil(breakerRating / currentDensity);
+      let busbarSizeStr = '25x6 mm';
+      if (reqAreaMm2 <= 150) busbarSizeStr = '1Rx25x6 mm';
+      else if (reqAreaMm2 <= 250) busbarSizeStr = '1Rx40x6 mm';
+      else if (reqAreaMm2 <= 400) busbarSizeStr = '1Rx40x10 mm';
+      else if (reqAreaMm2 <= 600) busbarSizeStr = '1Rx60x10 mm';
+      else if (reqAreaMm2 <= 1000) busbarSizeStr = '2Rx50x10 mm';
+      else if (reqAreaMm2 <= 1600) busbarSizeStr = '2Rx80x10 mm';
+      else busbarSizeStr = '3Rx100x10 mm';
+
+      // 4. Calculate Panel Enclosure Dimensions (Width x Height x Depth in mm)
+      const numBays = Math.max(2, Math.min(8, Math.ceil(feeders / 8) + (breakerRating >= 800 ? 1 : 0)));
+      const widthMm = numBays * 800;
+      const heightMm = 2100;
+      const depthMm = breakerRating >= 800 || panelType === 'PCC Panel' ? 800 : 600;
+
+      // 5. Calculate Preliminary Budgetary Price Range (INR)
+      let baseRatePerKw = 2650;
+      if (panelType === 'PCC Panel') baseRatePerKw = 2400;
+      if (panelType === 'APFC Panel') baseRatePerKw = 1480;
+      if (panelType === 'VFD Panel') baseRatePerKw = 5400;
+      if (panelType === 'PLC & SCADA Automation Panel') baseRatePerKw = 4200;
+
+      let feederCost = feeders * (panelType === 'VFD Panel' ? 18500 : 8200);
+      let rawCost = (loadKw * baseRatePerKw) + feederCost + 45000;
+
+      // Multipliers for Make, Busbar, and Enclosure
+      if (make === 'Siemens' || make === 'Schneider Electric') rawCost *= 1.12;
+      if (make === 'ABB') rawCost *= 1.10;
+      if (busbarMat.includes('Aluminium')) rawCost *= 0.88;
+      if (enclosure.includes('SS-304')) rawCost *= 1.32;
+      else if (enclosure.includes('IP65')) rawCost *= 1.14;
+
+      const lowEst = Math.round(rawCost * 0.95 / 5000) * 5000;
+      const highEst = Math.round(rawCost * 1.08 / 5000) * 5000;
+
+      const formatLakhs = (val) => {
+        if (val >= 100000) return `₹${(val / 100000).toFixed(2)}L`;
+        return `₹${(val / 1000).toFixed(0)}k`;
+      };
+
+      const budgetRangeStr = `${formatLakhs(lowEst)} – ${formatLakhs(highEst)}`;
+
+      // Update DOM Readouts
+      document.getElementById('specCurrent').textContent = `${fullLoadAmps} A`;
+      document.getElementById('specIncomer').textContent = `Incomer: ${shortBreakerLabel}`;
+      document.getElementById('specBusbarSize').textContent = busbarSizeStr;
+      document.getElementById('specBusbarMat').textContent = `${busbarMat.includes('Copper') ? 'Electrolytic Cu' : 'EC Grade Al'} • ${breakerRating}A`;
+      document.getElementById('specFootprint').textContent = `${widthMm}×${heightMm}×${depthMm}`;
+      document.getElementById('specBays').textContent = `W×H×D (mm) • ${numBays} Bays`;
+      document.getElementById('specBudgetRange').textContent = budgetRangeStr;
+      document.getElementById('bomMakeBadge').textContent = make;
+      document.getElementById('blueprintTitleStamp').textContent =
+        `DWG: ARYA-${panelType.split(' ')[0]}-${loadKw} | BUSBAR: ${busbarSizeStr} | MAKE: ${make.toUpperCase()}`;
+
+      // Save state for Proposal Modal & WhatsApp
+      currentCalculatedSpecs = {
+        industry,
+        panelType,
+        loadKw,
+        unit: panelType === 'APFC Panel' ? 'kVAR' : 'kW',
+        make,
+        busbarMat,
+        busbarSizeStr,
+        enclosure,
+        feeders,
+        fullLoadAmps,
+        breakerRating,
+        breakerType,
+        shortBreakerLabel,
+        widthMm,
+        heightMm,
+        depthMm,
+        numBays,
+        lowEst,
+        highEst,
+        budgetRangeStr
+      };
+
+      renderLiveBlueprint();
+      renderBomTable();
+    }
+
+    // -----------------------------------------------------------------------
+    // DYNAMIC SVG SINGLE LINE DIAGRAM (SLD) & GA FRONT VIEW GENERATOR
+    // -----------------------------------------------------------------------
+    function renderLiveBlueprint() {
+      const container = document.getElementById('svgBlueprintContainer');
+      const s = currentCalculatedSpecs;
+
+      if (currentBlueprintMode === 'SLD') {
+        // Determine up to 6 representative feeder branches to draw cleanly on the schematic
+        const visibleBranches = Math.min(6, Math.max(3, Math.ceil(s.feeders / 4)));
+        const branchWidth = 115;
+        const svgWidth = Math.max(720, visibleBranches * branchWidth + 100);
+        const svgHeight = 365;
+        const centerX = Math.round(svgWidth / 2);
+
+        let branchesSvg = '';
+        const startX = Math.round((svgWidth - (visibleBranches - 1) * branchWidth) / 2);
+
+        for (let i = 0; i < visibleBranches; i++) {
+          const bx = startX + i * branchWidth;
+          const feederRating = Math.max(16, Math.round(s.fullLoadAmps / s.feeders * 1.25));
+          let feederLabel = `F${i + 1}: ${feederRating}A`;
+          let loadSymbol = '';
+
+          if (s.panelType === 'APFC Panel') {
+            const stepKvar = Math.round(s.loadKw / s.feeders);
+            feederLabel = `STEP ${i + 1}: ${stepKvar}kVAR`;
+            // Draw Reactor coil + Capacitor symbol
+            loadSymbol = `
+              <path d="M ${bx} 245 Q ${bx - 8} 252 ${bx} 258 Q ${bx + 8} 264 ${bx} 270" stroke="#a855f7" stroke-width="2" fill="none"/>
+              <line x1="${bx}" y1="270" x2="${bx}" y2="282" stroke="#10b981" stroke-width="2"/>
+              <line x1="${bx - 14}" y1="282" x2="${bx + 14}" y2="282" stroke="#10b981" stroke-width="3"/>
+              <line x1="${bx - 14}" y1="290" x2="${bx + 14}" y2="290" stroke="#10b981" stroke-width="3"/>
+              <line x1="${bx}" y1="290" x2="${bx}" y2="305" stroke="#10b981" stroke-width="2"/>
+              <text x="${bx}" y="322" text-anchor="middle" fill="#a7f3d0" font-family="JetBrains Mono" font-size="9">7% + MPP CAP</text>
+            `;
+          } else if (s.panelType === 'VFD Panel') {
+            const driveKw = (s.loadKw / s.feeders).toFixed(1);
+            feederLabel = `VFD ${i + 1}: ${driveKw}kW`;
+            loadSymbol = `
+              <rect x="${bx - 22}" y="248" width="44" height="32" rx="4" fill="#1e1b4b" stroke="#818cf8" stroke-width="2"/>
+              <text x="${bx}" y="268" text-anchor="middle" fill="#c7d2fe" font-family="JetBrains Mono" font-weight="bold" font-size="10">AC/DC</text>
+              <line x1="${bx}" y1="280" x2="${bx}" y2="294" stroke="#38bdf8" stroke-width="2"/>
+              <circle cx="${bx}" cy="310" r="15" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+              <text x="${bx}" y="314" text-anchor="middle" fill="#10b981" font-family="JetBrains Mono" font-weight="bold" font-size="11">M</text>
+            `;
+          } else if (s.panelType === 'PLC & SCADA Automation Panel') {
+            feederLabel = `RACK 0${i + 1}`;
+            loadSymbol = `
+              <rect x="${bx - 28}" y="248" width="56" height="48" rx="4" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+              <text x="${bx}" y="268" text-anchor="middle" fill="#38bdf8" font-family="JetBrains Mono" font-weight="bold" font-size="9">${i === 0 ? 'PLC CPU' : 'DI/DO/AI'}</text>
+              <text x="${bx}" y="284" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="8">24V DC I/O</text>
+            `;
+          } else {
+            const motorKw = (s.loadKw / s.feeders).toFixed(1);
+            feederLabel = `F${i + 1} (${motorKw}kW)`;
+            loadSymbol = `
+              <circle cx="${bx}" cy="296" r="17" fill="#0f172a" stroke="#10b981" stroke-width="2.2"/>
+              <text x="${bx}" y="300" text-anchor="middle" fill="#10b981" font-family="JetBrains Mono" font-weight="bold" font-size="11">3~M</text>
+            `;
+          }
+
+          branchesSvg += `
+            <!-- Tap from Main Busbar -->
+            <circle cx="${bx}" cy="175" r="4" fill="#f59e0b"/>
+            <line x1="${bx}" y1="175" x2="${bx}" y2="205" stroke="#f59e0b" stroke-width="2"/>
+            <!-- Feeder Breaker Symbol -->
+            <line x1="${bx - 6}" y1="205" x2="${bx + 6}" y2="217" stroke="#38bdf8" stroke-width="2"/>
+            <line x1="${bx + 6}" y1="205" x2="${bx - 6}" y2="217" stroke="#38bdf8" stroke-width="2"/>
+            <line x1="${bx}" y1="211" x2="${bx - 10}" y2="230" stroke="#38bdf8" stroke-width="2"/>
+            <line x1="${bx}" y1="230" x2="${bx}" y2="278" stroke="#10b981" stroke-width="2"/>
+            ${loadSymbol}
+            <text x="${bx}" y="344" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono" font-weight="bold" font-size="10">${feederLabel}</text>
+          `;
+        }
+
+        const svgMarkup = `
+          <svg viewBox="0 0 ${svgWidth} ${svgHeight}" class="w-full max-w-3xl h-auto select-none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Top Incoming Supply Label -->
+            <rect x="${centerX - 145}" y="8" width="290" height="26" rx="4" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+            <text x="${centerX}" y="25" text-anchor="middle" fill="#f8fafc" font-family="JetBrains Mono" font-weight="bold" font-size="11">
+              415V AC, 3-PH, 4W, 50Hz SUPPLY (${s.fullLoadAmps}A FLC)
+            </text>
+
+            <!-- Main Vertical Incomer Line -->
+            <line x1="${centerX}" y1="34" x2="${centerX}" y2="66" stroke="#f59e0b" stroke-width="3"/>
+
+            <!-- CT / Multifunction Meter Tap -->
+            <circle cx="${centerX}" cy="50" r="8" fill="none" stroke="#38bdf8" stroke-width="2"/>
+            <line x1="${centerX + 8}" y1="50" x2="${centerX + 65}" y2="50" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3,3"/>
+            <rect x="${centerX + 65}" y="36" width="145" height="28" rx="4" fill="#0f172a" stroke="#0284c7" stroke-width="1.5"/>
+            <text x="${centerX + 137}" y="54" text-anchor="middle" fill="#38bdf8" font-family="JetBrains Mono" font-size="10">CT + MFM (Cl 0.5S)</text>
+
+            <!-- Main Incomer Breaker (ACB / MCCB) Box -->
+            <rect x="${centerX - 65}" y="66" width="130" height="44" rx="6" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/>
+            <text x="${centerX}" y="85" text-anchor="middle" fill="#fbbf24" font-family="JetBrains Mono" font-weight="bold" font-size="12">
+              ${s.shortBreakerLabel} (4P)
+            </text>
+            <text x="${centerX}" y="101" text-anchor="middle" fill="#cbd5e1" font-family="JetBrains Mono" font-size="9">
+              ${s.make} • 50kA
+            </text>
+
+            <!-- Line from Incomer to Main Busbar -->
+            <line x1="${centerX}" y1="110" x2="${centerX}" y2="175" stroke="#f59e0b" stroke-width="3.5"/>
+
+            <!-- Surge / Earth Fault / APFC Relay Annotation on Left -->
+            <line x1="${centerX}" y1="138" x2="${centerX - 75}" y2="138" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3,3"/>
+            <rect x="${centerX - 225}" y="124" width="150" height="28" rx="4" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5"/>
+            <text x="${centerX - 150}" y="142" text-anchor="middle" fill="#7dd3fc" font-family="JetBrains Mono" font-size="10">
+              ${s.panelType === 'APFC Panel' ? 'APFC µP RELAY (' + s.feeders + ' ST)' : 'SPD + EARTH FAULT RELAY'}
+            </text>
+
+            <!-- MAIN HORIZONTAL COPPER / ALUMINIUM BUSBAR -->
+            <line x1="45" y1="172" x2="${svgWidth - 45}" y2="172" stroke="#f59e0b" stroke-width="4"/>
+            <line x1="45" y1="178" x2="${svgWidth - 45}" y2="178" stroke="#d97706" stroke-width="2"/>
+            <rect x="45" y="150" width="255" height="18" rx="3" fill="#0f172a" opacity="0.9"/>
+            <text x="50" y="163" fill="#fbbf24" font-family="JetBrains Mono" font-weight="bold" font-size="10">
+              MAIN BUSBAR: ${s.busbarSizeStr} (${s.busbarMat.split(' ')[1]})
+            </text>
+
+            <!-- Outgoing Feeder Branches -->
+            ${branchesSvg}
+
+            <!-- Total Feeder Summary Badge -->
+            <rect x="${svgWidth - 220}" y="148" width="175" height="19" rx="3" fill="#064e3b" stroke="#10b981" stroke-width="1"/>
+            <text x="${svgWidth - 132}" y="161" text-anchor="middle" fill="#6ee7b7" font-family="JetBrains Mono" font-weight="bold" font-size="10">
+              TOTAL FEEDERS: ${s.feeders} NOS
+            </text>
+          </svg>
+        `;
+        container.innerHTML = svgMarkup;
+      } else {
+        // GA FRONT ELEVATION VIEW
+        const bayCount = s.numBays;
+        const bayW = 120;
+        const panelH = 260;
+        const totalW = bayCount * bayW + 120;
+        const svgH = 355;
+        const startX = 60;
+        const startY = 45;
+
+        let baysSvg = '';
+        for (let b = 0; b < bayCount; b++) {
+          const x = startX + b * bayW;
+          let compartments = '';
+          if (b === 0) {
+            // Incomer & Metering Bay
+            compartments = `
+              <!-- Top Metering Compartment -->
+              <rect x="${x + 6}" y="${startY + 25}" width="${bayW - 12}" height="55" fill="#1e293b" stroke="#64748b" stroke-width="1.5"/>
+              <circle cx="${x + 25}" cy="${startY + 42}" r="4" fill="#ef4444"/>
+              <circle cx="${x + 38}" cy="${startY + 42}" r="4" fill="#eab308"/>
+              <circle cx="${x + 51}" cy="${startY + 42}" r="4" fill="#3b82f6"/>
+              <rect x="${x + 70}" y="${startY + 35}" width="32" height="22" fill="#0284c7" rx="2"/>
+              <text x="${x + bayW / 2}" y="${startY + 72}" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="8">METERING & RELAYS</text>
+
+              <!-- Main Incomer ACB/MCCB Compartment -->
+              <rect x="${x + 6}" y="${startY + 86}" width="${bayW - 12}" height="105" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"/>
+              <rect x="${x + 32}" y="${startY + 110}" width="${bayW - 64}" height="48" fill="#0f172a" stroke="#fbbf24" stroke-width="1.5"/>
+              <text x="${x + bayW / 2}" y="${startY + 135}" text-anchor="middle" fill="#fbbf24" font-family="JetBrains Mono" font-weight="bold" font-size="9">${s.shortBreakerLabel}</text>
+              <text x="${x + bayW / 2}" y="${startY + 180}" text-anchor="middle" fill="#cbd5e1" font-family="JetBrains Mono" font-size="8">MAIN INCOMER</text>
+
+              <!-- Bottom Cable Alley / Spares -->
+              <rect x="${x + 6}" y="${startY + 196}" width="${bayW - 12}" height="45" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+              <text x="${x + bayW / 2}" y="${startY + 222}" text-anchor="middle" fill="#64748b" font-family="JetBrains Mono" font-size="8">GLAND BOX</text>
+            `;
+          } else {
+            // Outgoing Feeder Compartments (4 tiers per vertical bay)
+            for (let r = 0; r < 4; r++) {
+              const cy = startY + 25 + r * 54;
+              compartments += `
+                <rect x="${x + 6}" y="${cy}" width="${bayW - 12}" height="49" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+                <rect x="${x + 14}" y="${cy + 14}" width="18" height="18" fill="#0f172a" stroke="#94a3b8" stroke-width="1"/>
+                <circle cx="${x + 48}" cy="${cy + 22}" r="3.5" fill="#10b981"/>
+                <circle cx="${x + 60}" cy="${cy + 22}" r="3.5" fill="#ef4444"/>
+                <text x="${x + 88}" y="${cy + 26}" text-anchor="middle" fill="#cbd5e1" font-family="JetBrains Mono" font-size="8">FDR-${(b - 1) * 4 + r + 1}</text>
+              `;
+            }
+          }
+
+          baysSvg += `
+            <rect x="${x}" y="${startY}" width="${bayW}" height="${panelH}" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+            <!-- Top Horizontal Busbar Chamber -->
+            <rect x="${x + 2}" y="${startY + 2}" width="${bayW - 4}" height="19" fill="#451a03" stroke="#f59e0b" stroke-width="1"/>
+            <text x="${x + bayW / 2}" y="${startY + 15}" text-anchor="middle" fill="#fbbf24" font-family="JetBrains Mono" font-size="8">MAIN BUSBAR</text>
+            ${compartments}
+            <!-- Base Plinth ISMC 100 -->
+            <rect x="${x}" y="${startY + panelH}" width="${bayW}" height="14" fill="#334155" stroke="#cbd5e1" stroke-width="1"/>
+          `;
+        }
+
+        container.innerHTML = `
+          <svg viewBox="0 0 ${totalW} ${svgH}" class="w-full max-w-3xl h-auto select-none" xmlns="http://www.w3.org/2000/svg">
+            <text x="${totalW / 2}" y="24" text-anchor="middle" fill="#38bdf8" font-family="JetBrains Mono" font-weight="bold" font-size="12">
+              GENERAL ARRANGEMENT (GA) FRONT ELEVATION — ${s.enclosure}
+            </text>
+            ${baysSvg}
+            <!-- Width Dimension Line -->
+            <line x1="${startX}" y1="${startY + panelH + 30}" x2="${startX + bayCount * bayW}" y2="${startY + panelH + 30}" stroke="#38bdf8" stroke-width="1.5"/>
+            <text x="${startX + (bayCount * bayW) / 2}" y="${startY + panelH + 44}" text-anchor="middle" fill="#38bdf8" font-family="JetBrains Mono" font-weight="bold" font-size="11">
+              TOTAL WIDTH: ${s.widthMm} mm (${bayCount} VERTICAL SECTIONS) × HEIGHT: ${s.heightMm} mm × DEPTH: ${s.depthMm} mm
+            </text>
+          </svg>
+        `;
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // PRELIMINARY BILL OF MATERIALS (BOM) GENERATOR
+    // -----------------------------------------------------------------------
+    function renderBomTable() {
+      const s = currentCalculatedSpecs;
+      const tbody = document.getElementById('bomTableBody');
+
+      const bomItems = [
+        {
+          sr: '01',
+          item: 'Free-Standing Compartmentalized Enclosure',
+          spec: `${s.enclosure}, ${s.widthMm}(W)×${s.heightMm}(H)×${s.depthMm}(D) mm, RAL 7032 Powder Coated with ISMC 100 Base Frame`,
+          qty: '1 Lot',
+          make: 'Aryavarta ISO Certified Works'
+        },
+        {
+          sr: '02',
+          item: 'Main Incoming Circuit Breaker',
+          spec: `${s.breakerRating}A ${s.breakerType} with Rotary Handle / Spreader Links`,
+          qty: '1 Set',
+          make: s.make
+        },
+        {
+          sr: '03',
+          item: 'Main Horizontal & Vertical Busbar System',
+          spec: `${s.busbarMat}, ${s.busbarSizeStr} for R-Y-B-N with Heat-Shrinkable PVC Sleeves & SMC/DMC Supports (50kA/1s)`,
+          qty: '1 Lot',
+          make: 'Hindalco / Sterlite Grade'
+        },
+        {
+          sr: '04',
+          item: 'Digital Metering & Protection Package',
+          spec: '3-Phase Multifunction Meter (RS485 Modbus), Resin-Cast CTs, Phase Indicating LEDs, Push Buttons & SPD',
+          qty: '1 Set',
+          make: `${s.make} / Conzerv`
+        },
+        {
+          sr: '05',
+          item: s.panelType === 'APFC Panel' ? 'Detuned Harmonic Reactors & MPP Capacitor Banks' :
+                s.panelType === 'VFD Panel' ? 'Heavy-Duty AC Variable Frequency Drives & Chokes' :
+                s.panelType === 'PLC & SCADA Automation Panel' ? 'PLC CPU, Redundant 24VDC PSU, HMI & I/O Modules' :
+                'Outgoing Power / Motor Control Feeder Compartments',
+          spec: s.panelType === 'APFC Panel' ? `${s.loadKw} kVAR Total split across ${s.feeders} Automated Steps with Capacitor Duty Contactors` :
+                s.panelType === 'VFD Panel' ? `Variable Frequency Drives totaling ${s.loadKw} kW with 3% AC Input Line Reactors & Forced Ventilation` :
+                s.panelType === 'PLC & SCADA Automation Panel' ? `Ethernet PLC Controller, 10" Touch Color HMI, ${s.feeders} I/O Racks with Relay Isolation` :
+                `${s.feeders} Outgoing Feeders complete with MCCB/MPCB, Power Contactors & Thermal Overload Relays`,
+          qty: `${s.feeders} Sets`,
+          make: s.make
+        },
+        {
+          sr: '06',
+          item: 'E-Plan P8 Engineering & Factory Acceptance Testing',
+          spec: 'Complete E-Plan GA & SLD Schematics, Ferrule Numbered FRLS Wiring, High-Voltage & Insulation Test Reports',
+          qty: '1 Job',
+          make: 'Aryavarta Engineering Desk'
+        }
+      ];
+
+      tbody.innerHTML = bomItems.map(row => `
+        <tr class="hover:bg-slate-50">
+          <td class="py-2.5 px-3 font-mono font-bold text-slate-500">${row.sr}</td>
+          <td class="py-2.5 px-3 font-semibold text-slate-800">${row.item}</td>
+          <td class="py-2.5 px-3 text-slate-600">${row.spec}</td>
+          <td class="py-2.5 px-3 font-mono font-semibold text-sky-700 whitespace-nowrap">${row.qty}</td>
+          <td class="py-2.5 px-3 font-medium text-slate-800">${row.make}</td>
+        </tr>
+      `).join('');
+
+      // Also mirror BOM into Printable Proposal Modal
+      const propBomBody = document.getElementById('propBomBody');
+      if (propBomBody) {
+        propBomBody.innerHTML = bomItems.map(row => `
+          <tr>
+            <td class="py-1.5 px-2.5 border font-mono">${row.sr}</td>
+            <td class="py-1.5 px-2.5 border font-semibold">${row.item}</td>
+            <td class="py-1.5 px-2.5 border">${row.spec}</td>
+            <td class="py-1.5 px-2.5 border font-mono">${row.qty}</td>
+            <td class="py-1.5 px-2.5 border">${row.make}</td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // LEAD SUBMISSION, GOOGLE SHEETS WEBHOOK & PROPOSAL GENERATOR
+    // -----------------------------------------------------------------------
+    async function handleLeadSubmission(e) {
+      e.preventDefault();
+      const name = document.getElementById('leadName').value.trim();
+      const company = document.getElementById('leadCompany').value.trim();
+      const phone = document.getElementById('leadPhone').value.trim();
+      const email = document.getElementById('leadEmail').value.trim() || 'Not Provided';
+      const location = document.getElementById('leadLocation').value.trim() || 'MIDC Maharashtra';
+      const s = currentCalculatedSpecs;
+
+      const payload = {
+        name,
+        company,
+        phone,
+        email,
+        location,
+        industry: s.industry,
+        panelType: s.panelType,
+        ratingKw: s.loadKw,
+        make: s.make,
+        busbar: s.busbarMat,
+        enclosure: s.enclosure,
+        feeders: s.feeders,
+        estimatedBudget: s.budgetRangeStr
+      };
+
+      // 1. Add Lead to Built-in CRM Table (Tab 3) & Save in LocalStorage
+      const newCrmEntry = {
+        id: 'LD-' + Math.floor(1000 + Math.random() * 9000),
+        date: 'Just Now',
+        source: 'Inbound Calculator',
+        name,
+        company,
+        location,
+        phone,
+        email,
+        industry: s.industry,
+        panelType: s.panelType,
+        requirement: `${s.loadKw} ${s.unit} ${s.panelType} (${s.shortBreakerLabel}, ${s.make})`,
+        budget: s.budgetRangeStr,
+        status: 'NEW - HOT LEAD'
+      };
+      crmLeads.unshift(newCrmEntry);
+      saveCrmLeadsToStorage();
+      renderCrmTable();
+
+      // 2. Post to Google Sheets Webhook if configured
+      const webhookUrl = localStorage.getItem('aryavarta_webhook_url');
+      if (webhookUrl && webhookUrl.startsWith('https://')) {
+        try {
+          await fetch(webhookUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          showToast(`Lead synced to Google Sheets & CRM! Opening Official Proposal...`, 'success');
+        } catch (err) {
+          showToast(`Lead saved to Local CRM! Opening Official Proposal...`, 'info');
+        }
+      } else {
+        showToast(`Lead captured in Tab 3 CRM! Opening Official Proposal for ${company}...`, 'success');
+      }
+
+      // 3. Populate & Open Official Printable Proposal Modal
+      openProposalModal(name, company, phone, email, location);
+    }
+
+    function openProposalModal(name, company, phone, email, location) {
+      const s = currentCalculatedSpecs;
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
+      const refNo = `REF: ARYA/QTN/${now.getFullYear()}/${Math.floor(1000 + Math.random() * 8999)}`;
+
+      document.getElementById('propRefNo').textContent = refNo;
+      document.getElementById('propDate').textContent = `DATE: ${dateStr}`;
+      document.getElementById('propClientName').textContent = `Kind Attn: ${name}`;
+      document.getElementById('propClientCompany').textContent = company;
+      document.getElementById('propClientContact').textContent = `${location} | Ph: ${phone} | ${email}`;
+      document.getElementById('propSystemTitle').textContent = `${s.panelType} — ${s.loadKw} ${s.unit} (${s.make} Make)`;
+      document.getElementById('propIndustrySector').textContent = `Industry Sector: ${s.industry}`;
+      document.getElementById('propBudgetSummary').textContent = `Preliminary Budgetary Estimate: ${s.budgetRangeStr} (Ex-Works Pune)`;
+
+      document.getElementById('propSpecLoad').textContent = `${s.loadKw} ${s.unit} (${s.fullLoadAmps} Amps)`;
+      document.getElementById('propSpecIncomer').textContent = `${s.shortBreakerLabel} 4P 50kA`;
+      document.getElementById('propSpecBusbar').textContent = `${s.busbarMat} (${s.busbarSizeStr})`;
+      document.getElementById('propSpecEnclosure').textContent = `${s.enclosure.split(' ')[0]} • ${s.widthMm}×${s.heightMm}×${s.depthMm}mm`;
+
+      // Ensure SLD is rendered into the printable proposal container
+      const prevMode = currentBlueprintMode;
+      currentBlueprintMode = 'SLD';
+      renderLiveBlueprint();
+      document.getElementById('propSldContainer').innerHTML = document.getElementById('svgBlueprintContainer').innerHTML;
+      currentBlueprintMode = prevMode;
+      renderLiveBlueprint();
+
+      document.getElementById('proposalModal').classList.remove('hidden');
+    }
+
+    function closeProposalModal() {
+      document.getElementById('proposalModal').classList.add('hidden');
+    }
+
+    function sendConfigToWhatsApp() {
+      const s = currentCalculatedSpecs;
+      const name = document.getElementById('leadName').value.trim() || 'Project Engineer';
+      const company = document.getElementById('leadCompany').value.trim() || 'Our Plant';
+      const location = document.getElementById('leadLocation').value.trim() || 'Maharashtra';
+
+      const msg =
+        `*NEW PANEL INQUIRY VIA ARYAVARTA CONFIGURATOR*\n` +
+        `----------------------------------------\n` +
+        `*Name:* ${name}\n` +
+        `*Company:* ${company} (${location})\n` +
+        `*Industry:* ${s.industry}\n` +
+        `*Panel Type:* ${s.panelType}\n` +
+        `*Capacity / Load:* ${s.loadKw} ${s.unit} (${s.fullLoadAmps} Amps)\n` +
+        `*Main Incomer:* ${s.shortBreakerLabel}\n` +
+        `*Switchgear Make:* ${s.make}\n` +
+        `*Busbar:* ${s.busbarMat} (${s.busbarSizeStr})\n` +
+        `*Enclosure:* ${s.enclosure} (${s.widthMm}x${s.heightMm}x${s.depthMm}mm)\n` +
+        `*Outgoing Feeders:* ${s.feeders} Nos\n` +
+        `*Est. Budget Range:* ${s.budgetRangeStr}\n` +
+        `----------------------------------------\n` +
+        `Please share formal offer and E-Plan GA/SLD drawing.`;
+
+      const url = `https://wa.me/919766037466?text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank');
+    }
+
+    // -----------------------------------------------------------------------
+    // TAB 2: APFC & VFD POWER-BILL PENALTY ROI ENGINE
+    // -----------------------------------------------------------------------
+    let latestRoiCalc = { reqKvar: 250, vfdKw: 90 };
+
+    function calculateRoi() {
+      const monthlyBill = parseFloat(document.getElementById('roiMonthlyBill').value) || 500000;
+      const contractKva = parseFloat(document.getElementById('roiContractKva').value) || 400;
+      const currentPf = parseFloat(document.getElementById('roiCurrentPf').value) || 0.86;
+      const targetPf = parseFloat(document.getElementById('roiTargetPf').value) || 0.995;
+      const reactorPct = parseInt(document.getElementById('roiHarmonicReactor').value, 10) || 7;
+      const vfdKw = parseFloat(document.getElementById('roiVfdKw').value) || 0;
+      const hours = parseFloat(document.getElementById('roiHours').value) || 16;
+
+      document.getElementById('valCurrentPf').textContent = `${currentPf.toFixed(2)} Lag`;
+
+      // 1. Estimate active power (kW) from Contract Demand (~75% average loading * current PF)
+      const activeKw = contractKva * 0.78 * currentPf;
+      const phi1 = Math.acos(currentPf);
+      const phi2 = Math.acos(targetPf);
+      const rawKvar = activeKw * (Math.tan(phi1) - Math.tan(phi2));
+      const reqKvar = Math.max(25, Math.ceil(rawKvar / 25) * 25);
+
+      // 2. Calculate Monthly MSEDCL kVAh / PF Penalty Savings
+      // In kVAh billing, billed energy increases by (targetPF - currentPF) / currentPF
+      const pfPenaltyRatio = Math.max(0.01, (targetPf - currentPf) / targetPf);
+      const monthlyPfSavings = Math.round(monthlyBill * pfPenaltyRatio);
+
+      // 3. Calculate Monthly VFD Energy Savings (Affinity Law ~24% savings at Rs 9.2/kWh)
+      const monthlyVfdSavings = Math.round(vfdKw * hours * 26 * 0.24 * 9.2);
+
+      const totalMonthlySavings = monthlyPfSavings + monthlyVfdSavings;
+      const totalAnnualSavings = totalMonthlySavings * 12;
+
+      // 4. Calculate Turnkey Investment (APFC + VFD)
+      const reactorRate = reactorPct === 14 ? 1750 : reactorPct === 7 ? 1520 : 1150;
+      const apfcCost = reqKvar * reactorRate + 35000;
+      const vfdCost = vfdKw > 0 ? (vfdKw * 5200 + 25000) : 0;
+      const totalInvestment = Math.round((apfcCost + vfdCost) / 5000) * 5000;
+
+      const paybackMonths = totalMonthlySavings > 0 ? (totalInvestment / totalMonthlySavings).toFixed(1) : '0.0';
+
+      // Update UI Readouts
+      document.getElementById('roiOutMonthlySavings').textContent = `₹${totalMonthlySavings.toLocaleString('en-IN')} /mo`;
+      document.getElementById('roiOutAnnualSavings').textContent = `₹${totalAnnualSavings.toLocaleString('en-IN')} /yr`;
+      document.getElementById('roiOutPayback').textContent = `${paybackMonths} Months`;
+      document.getElementById('roiOutInvestment').textContent = `Est. Capex: ₹${(totalInvestment / 100000).toFixed(2)} Lakhs`;
+
+      document.getElementById('roiRecApfcSize').textContent = `${reqKvar} kVAR APFC Panel`;
+      document.getElementById('roiRecApfcSpec').textContent =
+        reactorPct > 0
+          ? `With ${reactorPct}% Copper Detuned Harmonic Reactors, 525V Heavy-Duty MPP Capacitors & Microprocessor APFC Relay.`
+          : `Standard Heavy-Duty APP/MPP Cylindrical Capacitor Bank with Capacitor Duty Contactors & APFC Relay.`;
+      document.getElementById('roiOutPfSavingsOnly').textContent = `₹${monthlyPfSavings.toLocaleString('en-IN')} /mo`;
+
+      document.getElementById('roiRecVfdSize').textContent = `${vfdKw} kW VFD Panel`;
+      document.getElementById('roiOutVfdSavingsOnly').textContent = `₹${monthlyVfdSavings.toLocaleString('en-IN')} /mo`;
+
+      document.getElementById('barLblInvest').textContent = `₹${totalInvestment.toLocaleString('en-IN')}`;
+      document.getElementById('barLblSavings').textContent = `₹${totalAnnualSavings.toLocaleString('en-IN')}`;
+      const barPct = Math.min(95, Math.max(12, Math.round((totalInvestment / Math.max(1, totalAnnualSavings)) * 100)));
+      document.getElementById('barWidthInvest').style.width = `${barPct}%`;
+
+      latestRoiCalc = { reqKvar, vfdKw, monthlyPfSavings, monthlyVfdSavings, totalMonthlySavings, totalAnnualSavings, totalInvestment, paybackMonths };
+    }
+
+    function transferRoiToConfigurator(mode) {
+      if (mode === 'APFC') {
+        selectPanelType('APFC Panel');
+        document.getElementById('cfgLoadInput').value = latestRoiCalc.reqKvar;
+        document.getElementById('cfgLoadSlider').value = latestRoiCalc.reqKvar;
+        document.getElementById('cfgFeeders').value = Math.min(16, Math.max(6, Math.ceil(latestRoiCalc.reqKvar / 25)));
+      } else {
+        selectPanelType('VFD Panel');
+        const kw = Math.max(15, latestRoiCalc.vfdKw);
+        document.getElementById('cfgLoadInput').value = kw;
+        document.getElementById('cfgLoadSlider').value = kw;
+        document.getElementById('cfgFeeders').value = 4;
+      }
+      updateConfiguration();
+      switchTab('tab-configurator');
+      showToast(`Loaded ${mode} specifications into the 60-Second Panel Configurator!`, 'success');
+    }
+
+    function shareRoiOnWhatsApp() {
+      const r = latestRoiCalc;
+      const msg =
+        `*ARYAVARTA POWER-BILL & APFC/VFD ROI AUDIT*\n` +
+        `----------------------------------------\n` +
+        `*Recommended APFC Bank:* ${r.reqKvar} kVAR Detuned Panel\n` +
+        `*Recommended VFD System:* ${r.vfdKw} kW VFD Panel\n` +
+        `*Monthly PF Savings:* ₹${r.monthlyPfSavings.toLocaleString('en-IN')} /mo\n` +
+        `*Monthly VFD Savings:* ₹${r.monthlyVfdSavings.toLocaleString('en-IN')} /mo\n` +
+        `*Total Annual Savings:* ₹${r.totalAnnualSavings.toLocaleString('en-IN')} /year\n` +
+        `*Estimated Turnkey Investment:* ₹${r.totalInvestment.toLocaleString('en-IN')}\n` +
+        `*Payback Period:* ${r.paybackMonths} Months\n` +
+        `----------------------------------------\n` +
+        `Hello Aryavarta Team, please schedule a technical discussion for this ROI proposal.`;
+
+      window.open(`https://wa.me/919766037466?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    // -----------------------------------------------------------------------
+    // TAB 3: PAN-INDIA PROJECT RADAR & OUTBOUND CRM PIPELINE
+    // -----------------------------------------------------------------------
+    function renderRadarCards() {
+      const region = document.getElementById('radarRegionSelect').value;
+      const grid = document.getElementById('radarLauncherGrid');
+
+      const signals = [
+        {
+          title: 'Sugar, Ethanol & Distillery Expansions',
+          badge: 'HIGH TICKET TURNKEY',
+          icon: 'fa-industry text-amber-400',
+          desc: 'Finds new ethanol distilleries, sugar crushing capacity expansions, and boiler/evaporation upgrades.',
+          query: `("ethanol plant" OR "sugar factory" OR "distillery" OR "cogeneration") AND (${region})`,
+          pitch: 'Pitch PCC, MCC, 14% Detuned APFC & Evaporation PLC/SCADA Automation'
+        },
+        {
+          title: 'Dairy, Brewery & Edible Oil New Units',
+          badge: 'SS-304 & PLC SCADA',
+          icon: 'fa-flask text-sky-400',
+          desc: 'Spots new milk processing plants, breweries, solvent extraction refineries, and Mega Food Parks.',
+          query: `("dairy plant" OR "milk processing" OR "brewery" OR "edible oil" OR "food park") AND (${region})`,
+          pitch: 'Pitch Hygienic SS-304 Enclosures, VFD Panels & CIP PLC/HMI Panels'
+        },
+        {
+          title: 'MIDC Electrical Fire & Breakdown Alerts',
+          badge: 'URGENT REPLACEMENT',
+          icon: 'fa-fire-flame-curved text-rose-400',
+          desc: 'Real-time news scan of factory short-circuits and MIDC electrical incidents needing immediate re-engineering.',
+          query: `("short circuit" OR "factory fire" OR "MIDC fire" OR "electrical fire") AND (${region})`,
+          pitch: 'Pitch Fast-Track E-Plan Re-Engineering, Replacement PCC/MCC & Cabling'
+        },
+        {
+          title: 'Water Treatment (ETP/STP) & Tenders',
+          badge: 'MPCB / GOVT TENDERS',
+          icon: 'fa-water text-emerald-400',
+          desc: 'Tracks new Effluent/Sewage Treatment Plant tenders and industrial pumping station automation jobs.',
+          query: `("water treatment plant" OR "ETP" OR "STP" OR "MCC Panel" OR "APFC Panel") AND ("tender" OR "MIDC") AND (${region})`,
+          pitch: 'Pitch PLC Telemetry, VFD Pump Control & Outdoor IP65 MCC Panels'
+        }
+      ];
+
+      grid.innerHTML = signals.map(sig => {
+        const newsUrl = `https://www.google.com/search?q=${encodeURIComponent(sig.query)}&tbm=nws&tbs=qdr:m`;
+        return `
+          <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 flex flex-col justify-between space-y-3 hover:border-sky-400 transition">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-900 text-slate-200">${sig.badge}</span>
+                <i class="fa-solid ${sig.icon} text-lg"></i>
+              </div>
+              <h4 class="font-bold text-slate-900 text-sm">${sig.title}</h4>
+              <p class="text-xs text-slate-500 mt-1">${sig.desc}</p>
+            </div>
+            <div class="pt-2 border-t border-slate-100 space-y-2">
+              <div class="text-[11px] font-mono text-sky-800 bg-sky-50 p-2 rounded">
+                <b>Action:</b> ${sig.pitch}
+              </div>
+              <div class="flex gap-2">
+                <a href="${newsUrl}" target="_blank" class="flex-1 bg-arya-navy hover:bg-slate-800 text-white text-xs font-semibold py-2 px-3 rounded-lg text-center flex items-center justify-center gap-1.5 transition">
+                  <i class="fa-solid fa-arrow-up-right-from-square text-sky-400"></i>
+                  <span>Launch Live Scan</span>
+                </a>
+                <button onclick="openAddLeadModal('${sig.title}')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold py-2 px-2.5 rounded-lg" title="Log discovered lead">
+                  <i class="fa-solid fa-plus"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function loadCrmLeadsFromStorage() {
+      const saved = localStorage.getItem('aryavarta_crm_leads');
+      if (saved) {
+        try {
+          crmLeads = JSON.parse(saved);
+        } catch (e) {
+          crmLeads = [...defaultCrmLeads];
+        }
+      } else {
+        crmLeads = [...defaultCrmLeads];
+      }
+      updateLeadBadgeCount();
+    }
+
+    function saveCrmLeadsToStorage() {
+      localStorage.setItem('aryavarta_crm_leads', JSON.stringify(crmLeads));
+      updateLeadBadgeCount();
+    }
+
+    function updateLeadBadgeCount() {
+      const badge = document.getElementById('crmLeadCountBadge');
+      if (badge) badge.textContent = `${crmLeads.length} LEADS`;
+    }
+
+    function renderCrmTable() {
+      const search = (document.getElementById('crmSearchInput').value || '').toLowerCase();
+      const industryFilter = document.getElementById('crmFilterIndustry').value;
+      const tbody = document.getElementById('crmTableBody');
+
+      const filtered = crmLeads.filter(lead => {
+        const matchesIndustry = industryFilter === 'ALL' || lead.industry === industryFilter;
+        const matchesSearch =
+          lead.company.toLowerCase().includes(search) ||
+          lead.name.toLowerCase().includes(search) ||
+          lead.location.toLowerCase().includes(search) ||
+          lead.requirement.toLowerCase().includes(search);
+        return matchesIndustry && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="py-8 text-center text-slate-400 font-mono text-xs">
+              No matching leads found. Try clearing your filter or add a new lead from the Radar.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map((lead, idx) => {
+        const statusColor =
+          lead.status.includes('NEW') ? 'bg-rose-100 text-rose-800 border-rose-200' :
+          lead.status.includes('QUOTE') ? 'bg-sky-100 text-sky-800 border-sky-200' :
+          'bg-emerald-100 text-emerald-800 border-emerald-200';
+
+        const cleanPhone = String(lead.phone).replace(/\D/g, '').slice(-10);
+        const waPitch = encodeURIComponent(
+          `Hello ${lead.name}, Greetings from *Aryavarta Automation, Pune* (ISO 9001:2015 & 14001:2015 Certified).\n\n` +
+          `Regarding your *${lead.industry}* facility at ${lead.location} — for your *${lead.requirement}*, ` +
+          `our preliminary budgetary estimate is *${lead.budget}*.\n\n` +
+          `We specialize in E-Plan P8 schematic design and turnkey panel manufacturing (150+ projects across Sugar, Ethanol, Dairy & MIDC plants).\n\n` +
+          `May we share a customized GA/SLD drawing and formal offer today?`
+        );
+        const waUrl = `https://wa.me/91${cleanPhone}?text=${waPitch}`;
+
+        return `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="py-3 px-4 whitespace-nowrap">
+              <div class="font-semibold text-slate-800">${lead.date}</div>
+              <div class="text-[10px] font-mono text-sky-700">${lead.source}</div>
+            </td>
+            <td class="py-3 px-4">
+              <div class="font-bold text-slate-900">${lead.company}</div>
+              <div class="text-[11px] text-slate-500"><i class="fa-solid fa-location-dot text-slate-400 mr-1"></i>${lead.location}</div>
+            </td>
+            <td class="py-3 px-4">
+              <div class="font-medium text-slate-800">${lead.name}</div>
+              <div class="text-[11px] font-mono text-slate-500">${lead.phone}</div>
+            </td>
+            <td class="py-3 px-4">
+              <span class="inline-block px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-mono text-[10px] mb-1">${lead.industry}</span>
+              <div class="font-medium text-slate-800">${lead.requirement}</div>
+            </td>
+            <td class="py-3 px-4 font-mono font-bold text-slate-900 whitespace-nowrap">${lead.budget}</td>
+            <td class="py-3 px-4 whitespace-nowrap">
+              <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold border ${statusColor}">${lead.status}</span>
+            </td>
+            <td class="py-3 px-4 text-right whitespace-nowrap">
+              <div class="inline-flex items-center gap-1.5">
+                <a href="${waUrl}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1.5 rounded-lg font-semibold text-xs inline-flex items-center gap-1 shadow-sm" title="1-Click WhatsApp Pitch">
+                  <i class="fa-brands fa-whatsapp"></i> Pitch
+                </a>
+                <button onclick="copyColdEmailForLead(${idx})" class="bg-slate-800 hover:bg-slate-900 text-white px-2.5 py-1.5 rounded-lg font-semibold text-xs inline-flex items-center gap-1" title="Copy Personalized Email">
+                  <i class="fa-regular fa-envelope"></i> Email
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function copyColdEmailForLead(idx) {
+      const lead = crmLeads[idx];
+      if (!lead) return;
+      const emailText =
+        `Subject: Technical Proposal: ${lead.requirement} for ${lead.company} | Aryavarta Automation (ISO 9001 & 14001)\n\n` +
+        `Dear ${lead.name},\n\n` +
+        `Greetings from Aryavarta Automation, Chikhali, Pune (www.aryavartaautomation.in).\n\n` +
+        `We understand that ${lead.company} (${lead.location}) has an upcoming requirement for ${lead.requirement}.\n\n` +
+        `As an ISO 9001:2015 & ISO 14001:2015 certified manufacturer with 150+ successful installations across ${lead.industry} plants, we offer:\n` +
+        `• Complete E-Plan P8 Schematic & GA Engineering\n` +
+        `• MCC, PCC, APFC (7% / 14% Detuned), VFD & PLC/SCADA Automation Panels\n` +
+        `• Preliminary Budgetary Estimate for your requirement: ${lead.budget}\n\n` +
+        `Could you share your load list or single line diagram so our design team can send a formal itemized offer today?\n\n` +
+        `Warm Regards,\n` +
+        `Engineering & Projects Desk\n` +
+        `Aryavarta Automation | Chikhali, Pune\n` +
+        `Mob: +91 9766037466 / +91 7028962982`;
+
+      copyTextToClipboard(emailText, `Copied personalized email for ${lead.company}!`);
+    }
+
+    function openAddLeadModal() {
+      document.getElementById('addLeadModal').classList.remove('hidden');
+    }
+
+    function closeAddLeadModal() {
+      document.getElementById('addLeadModal').classList.add('hidden');
+    }
+
+    function saveManualRadarLead(e) {
+      e.preventDefault();
+      const newLead = {
+        id: 'LD-' + Math.floor(1000 + Math.random() * 9000),
+        date: 'Today',
+        source: 'Manual Radar Entry',
+        company: document.getElementById('manCompany').value.trim(),
+        name: document.getElementById('manName').value.trim(),
+        phone: document.getElementById('manPhone').value.trim(),
+        location: document.getElementById('manLocation').value.trim(),
+        email: 'projects@plant.in',
+        industry: document.getElementById('manIndustry').value,
+        panelType: 'Custom Panel',
+        requirement: document.getElementById('manRequirement').value.trim(),
+        budget: document.getElementById('manBudget').value.trim(),
+        status: 'NEW - HOT LEAD'
+      };
+      crmLeads.unshift(newLead);
+      saveCrmLeadsToStorage();
+      renderCrmTable();
+      closeAddLeadModal();
+      showToast(`Added ${newLead.company} to your active CRM pipeline!`);
+    }
+
+    function exportCrmToCsv() {
+      const headers = ['Date', 'Source', 'Company', 'Location', 'Contact Person', 'Phone', 'Email', 'Industry', 'Requirement', 'Estimated Budget', 'Status'];
+      const rows = crmLeads.map(l => [
+        l.date, l.source, l.company, l.location, l.name, l.phone, l.email, l.industry, l.requirement, l.budget, l.status
+      ]);
+
+      const csvContent = [headers, ...rows]
+        .map(row => row.map(cell => `"${String(cell || '').replace(/"/g, '""')}"`).join(','))
+        .join('\n');
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `Aryavarta_Leads_CRM_${new Date().toISOString().slice(0, 10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast('Exported CRM pipeline to CSV for Google Sheets!');
+    }
+
+    // -----------------------------------------------------------------------
+    // TAB 4: GOOGLE SHEETS WEBHOOK, QR STICKER GENERATOR & TEMPLATES
+    // -----------------------------------------------------------------------
+    function saveWebhookUrl() {
+      const url = document.getElementById('webhookUrlInput').value.trim();
+      localStorage.setItem('aryavarta_webhook_url', url);
+      updateWebhookStatusBadge();
+      showToast(url ? 'Google Sheets Webhook URL saved!' : 'Switched to Local CRM mode.');
+    }
+
+    function updateWebhookStatusBadge() {
+      const url = localStorage.getItem('aryavarta_webhook_url') || '';
+      document.getElementById('webhookUrlInput').value = url;
+      const badge = document.getElementById('webhookStatusBadge');
+      if (url && url.startsWith('https://')) {
+        badge.className = 'px-2.5 py-1 rounded-full text-[11px] font-mono font-semibold bg-emerald-100 text-emerald-800';
+        badge.textContent = 'Google Sheet Connected';
+      } else {
+        badge.className = 'px-2.5 py-1 rounded-full text-[11px] font-mono font-semibold bg-amber-100 text-amber-800';
+        badge.textContent = 'Local CRM Mode';
+      }
+    }
+
+    async function testWebhookConnection() {
+      const url = document.getElementById('webhookUrlInput').value.trim();
+      if (!url) {
+        showToast('Please paste your Google Apps Script Web App URL first.', 'info');
+        return;
+      }
+      try {
+        await fetch(url, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: 'Test Engineer',
+            company: 'Aryavarta Webhook Verification',
+            location: 'Chikhali, Pune',
+            phone: '9766037466',
+            email: 'aryavartapune@gmail.com',
+            industry: 'Sugar & Ethanol Distillery',
+            panelType: 'MCC Panel',
+            ratingKw: 250,
+            make: 'Schneider Electric',
+            estimatedBudget: '₹6.40L – ₹7.20L'
+          })
+        });
+        showToast('Test payload sent! Check your Google Sheet Inbound_Leads tab.', 'success');
+      } catch (e) {
+        showToast('Could not reach webhook URL. Please verify deployment permissions.', 'info');
+      }
+    }
+
+    function copyAppsScriptCode() {
+      const code = document.getElementById('appsScriptCodeBlock').textContent;
+      copyTextToClipboard(code, 'Copied Google Apps Script code to clipboard!');
+    }
+
+    // Pure Deterministic SVG QR Matrix Generator (Works 100% Offline & Printable)
+    function updateQrStickerPreview() {
+      const urlText = document.getElementById('qrUrlInput').value.trim() || 'https://www.aryavartaautomation.in/';
+      const serialText = document.getElementById('qrSerialInput').value.trim() || 'ARYA-PNQ-2026-MCC01';
+      document.getElementById('qrPlateSerial').textContent = `PANEL ID: ${serialText}`;
+
+      const qrContainer = document.getElementById('qrCodeCanvasContainer');
+      const size = 21;
+      let hash = 0;
+      for (let i = 0; i < urlText.length; i++) {
+        hash = ((hash << 5) - hash) + urlText.charCodeAt(i);
+        hash |= 0;
+      }
+
+      const isFinderPattern = (r, c) => {
+        const inTopLeft = r < 7 && c < 7;
+        const inTopRight = r < 7 && c >= size - 7;
+        const inBottomLeft = r >= size - 7 && c < 7;
+        return inTopLeft || inTopRight || inBottomLeft;
+      };
+
+      const finderPixel = (r, c, r0, c0) => {
+        const dr = r - r0;
+        const dc = c - c0;
+        if (dr === 0 || dr === 6 || dc === 0 || dc === 6) return true;
+        if (dr >= 2 && dr <= 4 && dc >= 2 && dc <= 4) return true;
+        return false;
+      };
+
+      let rects = '';
+      for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+          let dark = false;
+          if (r < 7 && c < 7) dark = finderPixel(r, c, 0, 0);
+          else if (r < 7 && c >= size - 7) dark = finderPixel(r, c, 0, size - 7);
+          else if (r >= size - 7 && c < 7) dark = finderPixel(r, c, size - 7, 0);
+          else if (!isFinderPattern(r, c)) {
+            const seed = Math.sin((r * 31 + c * 17 + hash) * 0.73) * 10000;
+            dark = (seed - Math.floor(seed)) > 0.46;
+          }
+          if (dark) {
+            rects += `<rect x="${c * 5}" y="${r * 5}" width="5" height="5" fill="#0f172a"/>`;
+          }
+        }
+      }
+
+      // Use public QR image with deterministic SVG fallback
+      const encodedUrl = encodeURIComponent(urlText);
+      qrContainer.innerHTML = `
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=${encodedUrl}"
+             alt="Aryavarta QR Code"
+             class="w-28 h-28 object-contain"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+        <svg viewBox="0 0 105 105" class="w-28 h-28 hidden" xmlns="http://www.w3.org/2000/svg">
+          <rect width="105" height="105" fill="#ffffff"/>
+          ${rects}
+        </svg>
+      `;
+    }
+
+    function printQrSticker() {
+      const stickerHtml = document.getElementById('qrStickerPreviewCard').outerHTML;
+      const win = window.open('', '_blank', 'width=600,height=450');
+      if (!win) {
+        showToast('Please allow pop-ups or use Ctrl+P to print the QR plate.', 'info');
+        return;
+      }
+      win.document.write(`
+        <html>
+          <head>
+            <title>Aryavarta Panel QR Sticker Sheet</title>
+            <script src="https://cdn.tailwindcss.com"><\/script>
+          </head>
+          <body class="p-8 bg-white flex flex-col gap-6 items-center">
+            <div class="w-full max-w-lg">${stickerHtml}</div>
+            <div class="w-full max-w-lg">${stickerHtml}</div>
+            <script>setTimeout(() => { window.print(); }, 600);<\/script>
+          </body>
+        </html>
+      `);
+      win.document.close();
+    }
+
+    function renderMarketingTemplates() {
+      const container = document.getElementById('marketingTemplatesContainer');
+      const templates = [
+        {
+          title: '1. Sugar, Ethanol & Distillery Plant Head Pitch',
+          tag: 'SUGAR & ETHANOL',
+          body: `Hello Sir, Greetings from *Aryavarta Automation, Chikhali, Pune* (ISO 9001:2015 & 14001:2015 Certified).\n\nFor upcoming crushing/distillery expansions, we manufacture heavy-duty *PCC, MCC, 14% Detuned Harmonic APFC & PLC/SCADA Evaporation Panels* engineered in E-Plan P8.\n\nCheck instant budgetary panel pricing & single-line diagrams in 60 seconds on our portal: https://www.aryavartaautomation.in/ or reply with your load list for a same-day quote.\n\n📞 +91 9766037466`
+        },
+        {
+          title: '2. MSEDCL Power-Bill Penalty & APFC ROI Broadcast',
+          tag: 'MIDC FACTORY HEADS',
+          body: `Attention Maintenance & Electrical Heads: Most MIDC factories lose *₹40,000 to ₹2.5 Lakh/month* in hidden MSEDCL kVAh power-factor penalties and damper-throttled pump/blower losses.\n\nOur *7% Detuned Harmonic APFC & VFD Panels* deliver 100% payback in *3.5 to 5 months*.\n\nReply *"AUDIT"* or call *Aryavarta Automation, Pune (+91 9766037466)* for a free power-bill savings calculation today!`
+        },
+        {
+          title: '3. Dairy, Brewery & Food Processing (SS-304 Automation)',
+          tag: 'DAIRY & FOOD',
+          body: `Greetings from *Aryavarta Automation, Pune*! We specialize in hygienic *SS-304 IP65 Enclosures, Pasteurizer/CIP PLC-SCADA Panels, VFD Panels & MCCs* for Dairy, Brewery, and Edible Oil plants (150+ installations).\n\nNeed a budgetary quote or E-Plan GA/SLD drawing for an upcoming project? Call/WhatsApp us at *+91 9766037466* | www.aryavartaautomation.in`
+        }
+      ];
+
+      container.innerHTML = templates.map((t, idx) => `
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-slate-800 text-xs sm:text-sm">${t.title}</span>
+            <span class="px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-mono font-bold text-[10px]">${t.tag}</span>
+          </div>
+          <pre id="tplBody-${idx}" class="text-xs text-slate-600 whitespace-pre-wrap font-sans bg-white p-3 rounded-lg border border-slate-200">${t.body}</pre>
+          <div class="flex gap-2 pt-1">
+            <button onclick="copyTemplate(${idx})" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5">
+              <i class="fa-regular fa-copy"></i> Copy Script
+            </button>
+            <a href="https://wa.me/?text=${encodeURIComponent(t.body)}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5">
+              <i class="fa-brands fa-whatsapp"></i> Forward on WhatsApp
+            </a>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function copyTemplate(idx) {
+      const text = document.getElementById(`tplBody-${idx}`).textContent;
+      copyTextToClipboard(text, 'Campaign template copied to clipboard!');
+    }
+
+    // -----------------------------------------------------------------------
+    // INITIALIZE EVERYTHING ON WINDOW LOAD
+    // -----------------------------------------------------------------------
+    window.onload = function () {
+      loadCrmLeadsFromStorage();
+      updateConfiguration();
+      calculateRoi();
+      renderRadarCards();
+      renderCrmTable();
+      updateWebhookStatusBadge();
+      updateQrStickerPreview();
+      renderMarketingTemplates();
+    };
+  </script>
+</body>
+</html>
